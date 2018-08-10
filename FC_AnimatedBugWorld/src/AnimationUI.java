@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.TimelineBuilder;
 import javafx.application.Application;
@@ -21,7 +23,13 @@ public class AnimationUI extends Application {
 		
 		startWorld.populate();
 		
-		group.getChildren().add(startWorld);
+		//put bugs into group individually
+		int bugListSize=startWorld.getBugListSize();
+		for(int i=0;i<bugListSize;i++) {
+			group.getChildren().add(startWorld.getBugList().get(i).getCircle());
+		}
+		
+		//group.getChildren().add(startWorld);
 		final Scene scene=new Scene(group,width,height);
 		
 		KeyFrame frame =new KeyFrame(Duration.millis(16),new EventHandler<ActionEvent>() {
@@ -48,6 +56,14 @@ public class AnimationUI extends Application {
 		startWorld.update();
 		startWorld.draw();
 		
+	}
+	
+	public int getWidth() {
+		return this.width;
+	}
+	
+	public int getHeight() {
+		return this.height;
 	}
 
 	public static void main(String[] args) {
