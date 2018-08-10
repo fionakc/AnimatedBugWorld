@@ -66,7 +66,7 @@ public class World {
 		//Left hand wall
 		if(b.getCircle().getCenterX()+b.getCircle().getTranslateX()<b.getCircle().getRadius()) {
 			b.setdx(-1);
-			//b.getCircle().setTranslateX(b.getCircle().getRadius());
+			b.getCircle().setTranslateX(b.getCircle().getRadius()-b.getCircle().getCenterX());
 		}
 		
 		//collides with right wall
@@ -77,7 +77,7 @@ public class World {
 		
 		if(b.getCircle().getCenterX()+b.getCircle().getTranslateX()> this.width-b.getCircle().getRadius()) {
 			b.setdx(-1);
-			//b.getCircle().setTranslateX(this.width-b.getCircle().getRadius());
+			b.getCircle().setTranslateX(this.width-b.getCircle().getRadius()-b.getCircle().getCenterX());
 		}
 		
 		//collides with top
@@ -88,7 +88,7 @@ public class World {
 		
 		if(b.getCircle().getCenterY()+b.getCircle().getTranslateY()<b.getCircle().getRadius()) {
 			b.setdy(-1);
-			//b.getCircle().setTranslateY(b.getCircle().getRadius());
+			b.getCircle().setTranslateY(b.getCircle().getRadius()-b.getCircle().getCenterY());
 		}
 		//collides with bottom
 //		if(b.getYPos()>this.height-b.getRadius()) {
@@ -97,7 +97,7 @@ public class World {
 //		}	
 		if(b.getCircle().getCenterY()+b.getCircle().getTranslateY()>this.height-b.getCircle().getRadius()) {
 			b.setdy(-1);
-			//b.getCircle().setTranslateY(this.width-b.getCircle().getRadius());
+			b.getCircle().setTranslateY(this.height-b.getCircle().getRadius()-b.getCircle().getCenterY());
 			//balls[i].setYPos(scene.getWidth()-balls[i].getCircle().getRadius());
 		}
 		b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
@@ -197,6 +197,11 @@ public class World {
 	
 	public int getBugListSize() {
 		return bugList.size();
+	}
+	
+	public void updateWorldSize(double w, double h) {
+		this.width=(int)w;
+		this.height=(int)h;
 	}
 	
 }

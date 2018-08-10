@@ -16,6 +16,7 @@ public class AnimationUI extends Application {
 	int width=400, height=300;
 	World startWorld=new World(this.width, this.height);
 	Group group=new Group();
+	final Scene scene=new Scene(group,width,height);
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -30,7 +31,7 @@ public class AnimationUI extends Application {
 		}
 		
 		//group.getChildren().add(startWorld);
-		final Scene scene=new Scene(group,width,height);
+		//scene=new Scene(group,width,height);
 		
 		KeyFrame frame =new KeyFrame(Duration.millis(16),new EventHandler<ActionEvent>() {
 
@@ -53,6 +54,7 @@ public class AnimationUI extends Application {
 	} //end start
 	
 	public void updateBugWorld() {
+		startWorld.updateWorldSize(scene.getWidth(), scene.getHeight());
 		startWorld.update();
 		startWorld.draw();
 		
