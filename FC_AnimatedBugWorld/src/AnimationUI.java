@@ -24,6 +24,12 @@ public class AnimationUI extends Application {
 		
 		startWorld.populate();
 		
+		//put plants into group individually
+		int plantListSize=startWorld.getPlantListSize();
+		for(int i=0;i<plantListSize;i++) {
+			group.getChildren().add(startWorld.getPlantList().get(i).getCircle());
+		}
+		
 		//put bugs into group individually
 		int bugListSize=startWorld.getBugListSize();
 		for(int i=0;i<bugListSize;i++) {

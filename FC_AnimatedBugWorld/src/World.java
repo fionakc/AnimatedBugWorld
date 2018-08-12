@@ -7,8 +7,10 @@ public class World {
 	//Fields
 	private int height,width;
 	private ArrayList<Bug> bugList=new ArrayList<Bug>();
+	private ArrayList<Plant> plantList=new ArrayList<Plant>();
 	//also need plant arraylist
 	private int numberOfBugs = 5;
+	private int numberOfPlants=5;
 	
 	public World(int w,int h) {
 		this.height=h;
@@ -18,43 +20,49 @@ public class World {
 	
 	
 	public void populate() {
-		//System.out.println("populated");
-		//create bug and plant objects, store in arraylists
-		/**
-		 * boolean rabbitAdded=false;		
-		for(int i=0;i<this.numberOfRabbits;i++) {
-			rabbitAdded=false;
-			while(!rabbitAdded) {
-				int Xpos = (int)(Math.random()*(this.worldWidthx)); //create new animal position values
-				int Ypos = (int)(Math.random()*(this.worldHeighty));
-				boolean checkCollide=detectCollideAll(Xpos,Ypos);
-				if(!checkCollide) {
-					Rabbit rabbitTemp = new Rabbit (Xpos,Ypos);
-					this.animalList.add(rabbitTemp);
-					rabbitAdded=true;
-				} 				
-			} 				
-		} 
-		 */
+		
+		for(int i=0;i<this.numberOfPlants;i++) {
+			float radius=10;
+			boolean plantCollides=true;
+			while(plantCollides) {
+				double xTemp=(Math.random()*(this.width-2*radius)+radius);
+				double yTemp=(Math.random()*(this.height-2*radius)+radius);
+				plantCollides=detectCollide(xTemp,yTemp,radius);
+				if(!plantCollides) {
+					plantList.add(new Plant(this.width, this.height, (float)xTemp, (float)yTemp, radius));
+				}
+			}
+		}
+		
+		for(int i=0;i<this.numberOfBugs;i++) {
+			float radius=15;
+			boolean bugCollides=true;
+			while(bugCollides) {
+				double xTemp=(Math.random()*(this.width-2*radius)+radius);
+				double yTemp=(Math.random()*(this.height-2*radius)+radius);
+				bugCollides=detectCollide(xTemp,yTemp,radius);
+				if(!bugCollides) {
+					bugList.add(new Bug(this.width, this.height, (float)xTemp, (float)yTemp, radius));
+				}
+			}
+		}
+		
 		
 		//need to fix this so bugs don't collide while creating
-		boolean bugAdded=false;
-		for(int i=0;i<this.numberOfBugs;i++) {
-			bugList.add(new Bug(this.width, this.height));
-//			bugAdded=false;
-//			while(!bugAdded) {
-//				//float xtemp=(float)(Math.random()*(width-2*this.radius)+this.radius);
-//			}
-		}
+//		boolean bugAdded=false;
+//		for(int i=0;i<this.numberOfBugs;i++) {
+//			bugList.add(new Bug(this.width, this.height));
+////			bugAdded=false;
+////			while(!bugAdded) {
+////				//float xtemp=(float)(Math.random()*(width-2*this.radius)+this.radius);
+////			}
+//		}
 		
 		//bugList.add(new Bug(this.width,this.height));
 		
 	}
 	
 	public void collideWalls(Bug b) {
-		
-		//can't handle window size changes because it lives in world, not animation ui
-		
 		
 		//System.out.println("collide walls");
 		//collides with left wall
@@ -116,9 +124,11 @@ public class World {
 				double y2=this.bugList.get(i).getCircle().getCenterY()+this.bugList.get(i).getCircle().getTranslateY();
 				double rad2=this.bugList.get(i).getCircle().getRadius();
 				
-				//double minDistSqd=Math.pow(rad1+rad2, 2);
 				
-				if(Math.pow(x1-x2, 2)+Math.pow(y1-y2, 2)<Math.pow(rad1+rad2, 2)) {
+				double minDistSqd=Math.pow(rad1+rad2, 2);
+				double distSqd=Math.pow(x1-x2, 2)+Math.pow(y1-y2, 2);
+				
+				if(distSqd<minDistSqd) {
 					b.setdx(-1);
 					b.setdy(-1);
 					b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
@@ -130,9 +140,11 @@ public class World {
 					this.bugList.get(i).getCircle().setTranslateX(this.bugList.get(i).getCircle().getTranslateX()+this.bugList.get(i).getdx());
 					this.bugList.get(i).getCircle().setTranslateY(this.bugList.get(i).getCircle().getTranslateY()+this.bugList.get(i).getdy());
 					
-					//now need to move away if too close
-					
-					
+					//now need to move away if too close <<maybe not needed??
+//					double newXVal=x2+Math.sqrt(minDistSqd-(Math.pow(y1-y2, 2)));
+//					double newYVal=y2+Math.sqrt(minDistSqd-(Math.pow(x1-x2, 2)));
+//					b.getCircle().setTranslateX(newXVal-b.getCircle().getCenterX());
+//					b.getCircle().setTranslateY(newYVal-b.getCircle().getCenterY());
 				}
 				
 			}
@@ -140,43 +152,77 @@ public class World {
 		
 	} //end collideBugs
 	
-/**	
-	public boolean detectCollide(float x, float y, float rad) {
-		
-		//collide against other bugs
-		
-		
-		for (int i=0;i<this.bugList.size();i++) {
-			float x2=bugList.get(i).getXPos();
-	        float y2=bugList.get(i).getYPos();
-	        float rad2=bugList.get(i).getRadius();
-	
-	
-	        float minDistanceSqd=(float) Math.pow(rad+rad2,2);
-	        float distanceSqd=(float) (Math.pow(x-x2,2)+Math.pow(y-y2,2));
+	//pass in a bug to collide off plant objects
+	public void collidePlants(Bug b) {
+		double x1=b.getCircle().getCenterX()+b.getCircle().getTranslateX();
+		double y1=b.getCircle().getCenterY()+b.getCircle().getTranslateY();
+		double rad1=b.getCircle().getRadius();
+		for(int i=0;i<this.plantList.size();i++) {
 			
-			if(distanceSqd<minDistanceSqd) {
+			double x2=this.plantList.get(i).getCircle().getCenterX()+this.plantList.get(i).getCircle().getTranslateX();
+			double y2=this.plantList.get(i).getCircle().getCenterY()+this.plantList.get(i).getCircle().getTranslateY();
+			double rad2=this.plantList.get(i).getCircle().getRadius();
+			
+			double minDistSqd=Math.pow(rad1+rad2, 2);
+			double distSqd=Math.pow(x1-x2, 2)+Math.pow(y1-y2, 2);
+			
+			if(distSqd<minDistSqd) {
+				b.setdx(-1);
+				b.setdy(-1);
+				b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
+				b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy());
+
+
+			}
+		} //end for plantList
+			
+	} //end collidePlants
+	
+	public boolean detectCollide(double x1, double y1, double rad1) {
+		
+		for(int i=0;i<this.plantList.size();i++) {		
+			double x2=this.plantList.get(i).getCircle().getCenterX()+this.plantList.get(i).getCircle().getTranslateX();
+			double y2=this.plantList.get(i).getCircle().getCenterY()+this.plantList.get(i).getCircle().getTranslateY();
+			double rad2=this.plantList.get(i).getCircle().getRadius();
+			
+			//double minDistSqd=Math.pow(rad1+rad2, 2);
+			
+			if(Math.pow(x1-x2, 2)+Math.pow(y1-y2, 2)<Math.pow(rad1+rad2, 2)) {
 				return true;
-			} //end if check
+			}
+		}
+		
+		
+		for(int i=0;i<this.bugList.size();i++) {		
+			double x2=this.bugList.get(i).getCircle().getCenterX()+this.bugList.get(i).getCircle().getTranslateX();
+			double y2=this.bugList.get(i).getCircle().getCenterY()+this.bugList.get(i).getCircle().getTranslateY();
+			double rad2=this.bugList.get(i).getCircle().getRadius();
 			
-		} //end for bugList
+			//double minDistSqd=Math.pow(rad1+rad2, 2);
+			
+			if(Math.pow(x1-x2, 2)+Math.pow(y1-y2, 2)<Math.pow(rad1+rad2, 2)) {
+				return true;
+			}
+		}
 		
 		
 		return false;
-	}
+	} //end detectCollide
 	
-	*/
+
 	
 	public void update() {
 		//System.out.println("update");
 		//apply all the movements
-		for(int i=0;i<bugList.size();i++) {
-			collideWalls(bugList.get(i));
+		for(int i=0;i<this.bugList.size();i++) {
+			collideWalls(this.bugList.get(i));
+			collidePlants(this.bugList.get(i));
+			collideBugs(this.bugList.get(i), i);
 			
 		}
-		for(int i=0;i<bugList.size();i++) {
-			collideBugs(bugList.get(i), i);
-		}
+//		for(int i=0;i<bugList.size();i++) {
+//			collideBugs(bugList.get(i), i);
+//		}
 		
 	}
 	
@@ -192,11 +238,19 @@ public class World {
 	
 	//return bugList
 	public ArrayList<Bug> getBugList(){
-		return bugList;
+		return this.bugList;
+	}
+	
+	public ArrayList<Plant> getPlantList(){
+		return this.plantList;
 	}
 	
 	public int getBugListSize() {
-		return bugList.size();
+		return this.bugList.size();
+	}
+	
+	public int getPlantListSize() {
+		return this.plantList.size();
 	}
 	
 	public void updateWorldSize(double w, double h) {

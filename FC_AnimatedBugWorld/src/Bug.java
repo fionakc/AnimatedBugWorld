@@ -8,13 +8,31 @@ public class Bug {
 	//Fields
 	private float xPos,yPos,dx,dy;
 	private Circle circle;  //maybe remake as final
-	private float radius=20;
+	private float radius;
 	
+	//basic constructor
 	public Bug(int width, int height) {
-		xPos=(float) (Math.random()*(width-2*this.radius)+this.radius);
-		yPos=(float) (Math.random()*(height-2*this.radius)+this.radius);
-		dx=-1.5f;
-		dy=-1.5f;
+		this.xPos=(float) (Math.random()*(width-2*this.radius)+this.radius);
+		this.yPos=(float) (Math.random()*(height-2*this.radius)+this.radius);
+		this.dx=-1.5f;
+		this.dy=-1.5f;
+		this.radius=20;
+		
+		this.circle=new Circle(xPos,yPos,radius);
+		
+		//from the internet to get random colours
+		//https://stackoverflow.com/questions/35715283/set-text-to-random-color-opacity-javafx
+		this.circle.setFill(Color.color(Math.random(), Math.random(), Math.random()));
+		
+	}
+	
+	//constructor with bug size inputs
+	public Bug (int width, int height, float x, float y, float rad) {
+		this.xPos=x;
+		this.yPos=y;
+		this.dx=-1.5f;
+		this.dy=-1.5f;
+		this.radius=rad;
 		
 		circle=new Circle(xPos,yPos,radius);
 		
