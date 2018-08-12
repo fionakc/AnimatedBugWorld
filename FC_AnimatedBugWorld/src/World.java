@@ -1,24 +1,23 @@
 import java.util.ArrayList;
 
-//import main.Rabbit;
-
 public class World {
 
 	//Fields
 	private int height,width;
 	private ArrayList<Bug> bugList=new ArrayList<Bug>();
 	private ArrayList<Plant> plantList=new ArrayList<Plant>();
-	//also need plant arraylist
 	private int numberOfBugs = 5;
 	private int numberOfPlants=5;
+	
+	private ArrayList<Bug> deadBugs=new ArrayList<Bug>();
+	private ArrayList<Plant> deadPlants=new ArrayList<Plant>();
 	
 	public World(int w,int h) {
 		this.height=h;
 		this.width=w;
 	}
 	
-	
-	
+		
 	public void populate() {
 		
 		for(int i=0;i<this.numberOfPlants;i++) {
@@ -46,72 +45,41 @@ public class World {
 				}
 			}
 		}
-		
-		
-		//need to fix this so bugs don't collide while creating
-//		boolean bugAdded=false;
-//		for(int i=0;i<this.numberOfBugs;i++) {
-//			bugList.add(new Bug(this.width, this.height));
-////			bugAdded=false;
-////			while(!bugAdded) {
-////				//float xtemp=(float)(Math.random()*(width-2*this.radius)+this.radius);
-////			}
-//		}
-		
-		//bugList.add(new Bug(this.width,this.height));
-		
+
 	}
 	
+	
 	public void collideWalls(Bug b) {
-		
-		//System.out.println("collide walls");
-		//collides with left wall
-//		if(b.getXPos()<b.getRadius()) { 
-//			b.setdx(-1);
-//			b.setXPos(b.getRadius());
-//			
-//		}
-		//Left hand wall
+
+		//collides with left hand wall
 		if(b.getCircle().getCenterX()+b.getCircle().getTranslateX()<b.getCircle().getRadius()) {
 			b.setdx(-1);
 			b.getCircle().setTranslateX(b.getCircle().getRadius()-b.getCircle().getCenterX());
 		}
 		
 		//collides with right wall
-//		if(b.getXPos()>this.width-b.getRadius()) {
-//			b.setdx(-1);
-//			b.setXPos(this.width-b.getRadius());
-//		}
-		
 		if(b.getCircle().getCenterX()+b.getCircle().getTranslateX()> this.width-b.getCircle().getRadius()) {
 			b.setdx(-1);
 			b.getCircle().setTranslateX(this.width-b.getCircle().getRadius()-b.getCircle().getCenterX());
 		}
 		
 		//collides with top
-//		if(b.getYPos()<0 ) {
-//			b.setdy(-1);
-//			b.setYPos(b.getRadius());
-//		}
-		
 		if(b.getCircle().getCenterY()+b.getCircle().getTranslateY()<b.getCircle().getRadius()) {
 			b.setdy(-1);
 			b.getCircle().setTranslateY(b.getCircle().getRadius()-b.getCircle().getCenterY());
 		}
+		
 		//collides with bottom
-//		if(b.getYPos()>this.height-b.getRadius()) {
-//			b.setdy(-1);
-//			b.setYPos(this.width-b.getRadius());					
-//		}	
 		if(b.getCircle().getCenterY()+b.getCircle().getTranslateY()>this.height-b.getCircle().getRadius()) {
 			b.setdy(-1);
 			b.getCircle().setTranslateY(this.height-b.getCircle().getRadius()-b.getCircle().getCenterY());
-			//balls[i].setYPos(scene.getWidth()-balls[i].getCircle().getRadius());
 		}
+		
 		b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
 		b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy());
 		
 	} //end collides wall
+	
 	
 	public void collideBugs(Bug b, int bugI) {
 		double x1=b.getCircle().getCenterX()+b.getCircle().getTranslateX();
@@ -152,6 +120,7 @@ public class World {
 		
 	} //end collideBugs
 	
+	
 	//pass in a bug to collide off plant objects
 	public void collidePlants(Bug b) {
 		double x1=b.getCircle().getCenterX()+b.getCircle().getTranslateX();
@@ -172,11 +141,16 @@ public class World {
 				b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
 				b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy());
 
+				//if bug hits a plant, plant gets eaten
+				this.plantList.get(i).eaten();
+				//System.out.println("plant "+i+" has age "+this.plantList.get(i).getAge());
+				b.gainEnergy();
 
 			}
 		} //end for plantList
 			
 	} //end collidePlants
+	
 	
 	public boolean detectCollide(double x1, double y1, double rad1) {
 		
@@ -185,26 +159,20 @@ public class World {
 			double y2=this.plantList.get(i).getCircle().getCenterY()+this.plantList.get(i).getCircle().getTranslateY();
 			double rad2=this.plantList.get(i).getCircle().getRadius();
 			
-			//double minDistSqd=Math.pow(rad1+rad2, 2);
-			
 			if(Math.pow(x1-x2, 2)+Math.pow(y1-y2, 2)<Math.pow(rad1+rad2, 2)) {
 				return true;
 			}
 		}
-		
-		
+				
 		for(int i=0;i<this.bugList.size();i++) {		
 			double x2=this.bugList.get(i).getCircle().getCenterX()+this.bugList.get(i).getCircle().getTranslateX();
 			double y2=this.bugList.get(i).getCircle().getCenterY()+this.bugList.get(i).getCircle().getTranslateY();
 			double rad2=this.bugList.get(i).getCircle().getRadius();
 			
-			//double minDistSqd=Math.pow(rad1+rad2, 2);
-			
 			if(Math.pow(x1-x2, 2)+Math.pow(y1-y2, 2)<Math.pow(rad1+rad2, 2)) {
 				return true;
 			}
 		}
-		
 		
 		return false;
 	} //end detectCollide
@@ -212,7 +180,7 @@ public class World {
 
 	
 	public void update() {
-		//System.out.println("update");
+		
 		//apply all the movements
 		for(int i=0;i<this.bugList.size();i++) {
 			collideWalls(this.bugList.get(i));
@@ -220,9 +188,26 @@ public class World {
 			collideBugs(this.bugList.get(i), i);
 			
 		}
-//		for(int i=0;i<bugList.size();i++) {
-//			collideBugs(bugList.get(i), i);
-//		}
+		
+		//update all the plants  <<not great
+		for(int i=0;i<this.plantList.size();i++) {
+			if(this.plantList.get(i).getAge()>0) {
+				//plantList.get(i).ageUp();
+			} else {
+				this.deadPlants.add(this.plantList.get(i));
+				this.plantList.remove(i);
+			}
+			
+		}
+		
+		for(int i=0;i<this.bugList.size();i++) {
+			if(this.bugList.get(i).getEnergy()>0) {
+				this.bugList.get(i).loseEnergy();
+			}else {
+				this.deadBugs.add(this.bugList.get(i));
+				this.bugList.remove(i);
+			}
+		}
 		
 	}
 	
@@ -236,7 +221,14 @@ public class World {
 		
 	}
 	
-	//return bugList
+	public ArrayList<Bug> getDeadBugs(){
+		return this.deadBugs;
+	}
+	
+	public ArrayList<Plant> getDeadPlants(){
+		return this.deadPlants;
+	}
+	
 	public ArrayList<Bug> getBugList(){
 		return this.bugList;
 	}
@@ -257,5 +249,7 @@ public class World {
 		this.width=(int)w;
 		this.height=(int)h;
 	}
+	
+	
 	
 }

@@ -9,6 +9,7 @@ public class Bug {
 	private float xPos,yPos,dx,dy;
 	private Circle circle;  //maybe remake as final
 	private float radius;
+	private int energy;
 	
 	//basic constructor
 	public Bug(int width, int height) {
@@ -17,6 +18,7 @@ public class Bug {
 		this.dx=-1.5f;
 		this.dy=-1.5f;
 		this.radius=20;
+		this.energy=1000;
 		
 		this.circle=new Circle(xPos,yPos,radius);
 		
@@ -33,6 +35,7 @@ public class Bug {
 		this.dx=-1.5f;
 		this.dy=-1.5f;
 		this.radius=rad;
+		this.energy=1000;
 		
 		circle=new Circle(xPos,yPos,radius);
 		
@@ -91,5 +94,21 @@ public class Bug {
 	public void move() {
 		this.xPos+=this.dx;
 		this.yPos+=this.dy;
+	}
+	
+	public int getEnergy() {
+		return this.energy;
+	}
+	
+	public void loseEnergy() {
+		this.energy--;
+	}
+	
+	public void gainEnergy() {
+		this.energy=this.energy+400;
+	}
+	
+	public void setColour() {
+		this.circle.setFill(Color.WHITE);
 	}
 }

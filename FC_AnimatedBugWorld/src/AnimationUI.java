@@ -60,9 +60,19 @@ public class AnimationUI extends Application {
 	} //end start
 	
 	public void updateBugWorld() {
+		
 		startWorld.updateWorldSize(scene.getWidth(), scene.getHeight());
 		startWorld.update();
 		startWorld.draw();
+		
+		//remove dead plants and bugs from scene		
+		for(int i=0;i<startWorld.getDeadPlants().size();i++) {
+			group.getChildren().remove(startWorld.getDeadPlants().get(i).getCircle());
+		}
+		for(int i=0;i<startWorld.getDeadBugs().size();i++) {
+			group.getChildren().remove(startWorld.getDeadBugs().get(i).getCircle());
+		}
+		
 		
 	}
 	
