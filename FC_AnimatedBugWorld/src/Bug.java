@@ -1,6 +1,11 @@
+import java.util.ArrayList;
 import java.util.Random;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 public class Bug {
@@ -10,6 +15,10 @@ public class Bug {
 	private Circle circle;  //maybe remake as final
 	private float radius;
 	private int energy;
+	private int movement=0;
+	Image image=new Image(getClass().getResourceAsStream("beetle.png"));
+	//Paint imageView = new ImageView(image);
+	private ArrayList<Plant> foodNearby =new ArrayList<Plant>();
 	
 	//basic constructor
 	public Bug(int width, int height) {
@@ -21,10 +30,12 @@ public class Bug {
 		this.energy=1000;
 		
 		this.circle=new Circle(xPos,yPos,radius);
+		this.circle.setFill(new ImagePattern(image));
+		//p.setFill(new ImagePattern(flower, 0, 0, 1, 1, true));
 		
 		//from the internet to get random colours
 		//https://stackoverflow.com/questions/35715283/set-text-to-random-color-opacity-javafx
-		this.circle.setFill(Color.color(Math.random(), Math.random(), Math.random()));
+		//this.circle.setFill(Color.color(Math.random(), Math.random(), Math.random()));
 		
 	}
 	
@@ -37,16 +48,62 @@ public class Bug {
 		this.radius=rad;
 		this.energy=1000;
 		
-		circle=new Circle(xPos,yPos,radius);
+		this.circle=new Circle(xPos,yPos,radius);
 		
+		//randomly pic bug icon
+		int direction = (int)(Math.random()*3);
+		if(direction<1) {
+			this.circle.setFill(new ImagePattern(new Image(getClass().getResourceAsStream("beetle.png"))));
+		}else if (direction<2){
+			this.circle.setFill(new ImagePattern(new Image(getClass().getResourceAsStream("bug1.png"))));
+		}else {
+			this.circle.setFill(new ImagePattern(new Image(getClass().getResourceAsStream("bug2.png"))));
+		}			
+		//this.circle.setFill(new ImagePattern(image));
 		//from the internet to get random colours
 		//https://stackoverflow.com/questions/35715283/set-text-to-random-color-opacity-javafx
-		circle.setFill(Color.color(Math.random(), Math.random(), Math.random()));
+		//circle.setFill(Color.color(Math.random(), Math.random(), Math.random()));
 		
 	}
+
+	public void lookForFood(ArrayList<Plant> plantList) {
+		foodNearby.clear();
+		double radOffset=getRadius()*5;
+
+		for(int i=0;i<plantList.size();i++) {		
+			double x2=plantList.get(i).getXPos();
+			double y2=plantList.get(i).getYPos();
+			double rad2=plantList.get(i).getRadius();
+			
+			if(Math.pow(getXPos()-x2, 2)+Math.pow(getYPos()-y2, 2)<Math.pow(getRadius()+rad2+radOffset, 2)) {
+				foodNearby.add(plantList.get(i));
+			}
+		}
+	}
 	
-	//bug needs an x,y,dx,dy,rad and circle to draw it
-	//can i just redraw the circle at the x and y??
+	public void moveBug() {
+		if(foodNearby.isEmpty()) {
+			changeDirectionRandom();
+		}else {
+			moveToFood(foodNearby.get(0));
+				
+			
+		}
+	}
+	
+	public void moveToFood(Plant plant) {
+		//if bug is right and down from plant
+		if(getXPos()>plant.getXPos() && getYPos()>plant.getYPos()) {
+			setDirection(-1,-1);
+		} else if(getXPos()<plant.getXPos() && getYPos()>plant.getYPos()) {
+			setDirection(1,-1);
+		} else if(getXPos()<plant.getXPos() && getYPos()<plant.getYPos()) {
+			setDirection(1,1);
+		} else {
+			setDirection(-1,1);
+		}
+		//move();
+	}
 	
 	public float getdx() {
 		return this.dx;
@@ -68,47 +125,75 @@ public class Bug {
 		return this.circle;
 	}
 	
-	public float getXPos() {
-		return this.xPos;
-		//or return circle.getCenterX()+circle.getTranslateX??
+	public double getXPos() {
+		//return this.xPos;
+		return this.circle.getCenterX()+this.circle.getTranslateX();
+	}
+//	
+//	public void setXPos(float x) {
+//		this.xPos=x;
+//		circle.setTranslateX(x);
+//	}
+//	
+	public double getYPos() {
+		//return this.yPos;
+		return this.circle.getCenterY()+this.circle.getTranslateY();
+	}
+//	
+//	public void setYPos(float y) {
+//		this.yPos=y;
+//		circle.setTranslateY(y);
+//	}
+//	
+	public double getRadius() {
+		return this.circle.getRadius();
+	}
+//	
+	public void setDirection(int changeX, int changeY) {
+		this.dx=changeX*Math.abs(this.dx); //this.dx;
+		this.dy=changeY*Math.abs(this.dy); //this.dx;
 	}
 	
-	public void setXPos(float x) {
-		this.xPos=x;
-		circle.setTranslateX(x);
+	public void move() {		
+		this.circle.setTranslateX(this.circle.getTranslateX()+this.dx);
+		this.circle.setTranslateY(this.circle.getTranslateY()+this.dy);
 	}
 	
-	public float getYPos() {
-		return this.yPos;
-	}
 	
-	public void setYPos(float y) {
-		this.yPos=y;
-		circle.setTranslateY(y);
-	}
-	
-	public float getRadius() {
-		return this.radius;
-	}
-	
-	public void move() {
-		this.xPos+=this.dx;
-		this.yPos+=this.dy;
+	public void changeDirectionRandom() {
+		if(this.movement>50) {
+			int direction = (int)(Math.random()*4);		
+			switch (direction) {			
+				case 0: setDirection(1,-1);
+						break;
+				case 1:	setDirection(-1,1);
+						break;
+				case 2: setDirection(-1,-1);
+						break;
+				case 3: setDirection(1,1);
+						break;		
+			} 
+			this.movement=0;
+		}
+		//move();
+		
 	}
 	
 	public int getEnergy() {
 		return this.energy;
 	}
 	
+	//every time bug moves, lose energy and log a movement
 	public void loseEnergy() {
 		this.energy--;
+		this.movement++;
 	}
 	
 	public void gainEnergy() {
 		this.energy=this.energy+400;
 	}
 	
-	public void setColour() {
-		this.circle.setFill(Color.WHITE);
-	}
+//	public void setColour() {
+//		this.circle.setFill(Color.WHITE);
+//	}
 }

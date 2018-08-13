@@ -7,13 +7,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class AnimationUI extends Application {
 
 	//Fields
-	int width=400, height=300;
+	int width=600, height=500;
 	World startWorld=new World(this.width, this.height);
 	Group group=new Group();
 	final Scene scene=new Scene(group,width,height);
@@ -39,6 +41,8 @@ public class AnimationUI extends Application {
 		//group.getChildren().add(startWorld);
 		//scene=new Scene(group,width,height);
 		
+		
+		
 		KeyFrame frame =new KeyFrame(Duration.millis(16),new EventHandler<ActionEvent>() {
 
 			@Override
@@ -52,6 +56,12 @@ public class AnimationUI extends Application {
 		
 		TimelineBuilder.create().cycleCount(javafx.animation.Animation.INDEFINITE).keyFrames(frame).build().play();
 		
+		//make screen look nicer
+		BorderPane pane = new BorderPane();
+		Label title=new Label("Welcome to Bug World");
+		
+		
+		
 		
 		primaryStage.setTitle("Bug World Animation");
 		primaryStage.setScene(scene);
@@ -63,7 +73,7 @@ public class AnimationUI extends Application {
 		
 		startWorld.updateWorldSize(scene.getWidth(), scene.getHeight());
 		startWorld.update();
-		startWorld.draw();
+		//startWorld.draw();
 		
 		//remove dead plants and bugs from scene		
 		for(int i=0;i<startWorld.getDeadPlants().size();i++) {
@@ -76,13 +86,13 @@ public class AnimationUI extends Application {
 		
 	}
 	
-	public int getWidth() {
-		return this.width;
-	}
-	
-	public int getHeight() {
-		return this.height;
-	}
+//	public int getWidth() {
+//		return this.width;
+//	}
+//	
+//	public int getHeight() {
+//		return this.height;
+//	}
 
 	public static void main(String[] args) {
 		launch();

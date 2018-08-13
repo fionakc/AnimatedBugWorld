@@ -6,8 +6,8 @@ public class World {
 	private int height,width;
 	private ArrayList<Bug> bugList=new ArrayList<Bug>();
 	private ArrayList<Plant> plantList=new ArrayList<Plant>();
-	private int numberOfBugs = 5;
-	private int numberOfPlants=5;
+	private int numberOfBugs = 10;
+	private int numberOfPlants=20;
 	
 	private ArrayList<Bug> deadBugs=new ArrayList<Bug>();
 	private ArrayList<Plant> deadPlants=new ArrayList<Plant>();
@@ -21,7 +21,7 @@ public class World {
 	public void populate() {
 		
 		for(int i=0;i<this.numberOfPlants;i++) {
-			float radius=10;
+			float radius=5;
 			boolean plantCollides=true;
 			while(plantCollides) {
 				double xTemp=(Math.random()*(this.width-2*radius)+radius);
@@ -34,7 +34,7 @@ public class World {
 		}
 		
 		for(int i=0;i<this.numberOfBugs;i++) {
-			float radius=15;
+			float radius=5;
 			boolean bugCollides=true;
 			while(bugCollides) {
 				double xTemp=(Math.random()*(this.width-2*radius)+radius);
@@ -52,45 +52,45 @@ public class World {
 	public void collideWalls(Bug b) {
 
 		//collides with left hand wall
-		if(b.getCircle().getCenterX()+b.getCircle().getTranslateX()<b.getCircle().getRadius()) {
+		if(b.getXPos()<b.getCircle().getRadius()) {
 			b.setdx(-1);
 			b.getCircle().setTranslateX(b.getCircle().getRadius()-b.getCircle().getCenterX());
 		}
 		
 		//collides with right wall
-		if(b.getCircle().getCenterX()+b.getCircle().getTranslateX()> this.width-b.getCircle().getRadius()) {
+		if(b.getXPos()> this.width-b.getCircle().getRadius()) {
 			b.setdx(-1);
 			b.getCircle().setTranslateX(this.width-b.getCircle().getRadius()-b.getCircle().getCenterX());
 		}
 		
 		//collides with top
-		if(b.getCircle().getCenterY()+b.getCircle().getTranslateY()<b.getCircle().getRadius()) {
+		if(b.getYPos()<b.getCircle().getRadius()) {
 			b.setdy(-1);
 			b.getCircle().setTranslateY(b.getCircle().getRadius()-b.getCircle().getCenterY());
 		}
 		
 		//collides with bottom
-		if(b.getCircle().getCenterY()+b.getCircle().getTranslateY()>this.height-b.getCircle().getRadius()) {
+		if(b.getYPos()>this.height-b.getCircle().getRadius()) {
 			b.setdy(-1);
 			b.getCircle().setTranslateY(this.height-b.getCircle().getRadius()-b.getCircle().getCenterY());
 		}
 		
-		b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
-		b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy());
+//		b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
+//		b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy());
 		
 	} //end collides wall
 	
 	
 	public void collideBugs(Bug b, int bugI) {
-		double x1=b.getCircle().getCenterX()+b.getCircle().getTranslateX();
-		double y1=b.getCircle().getCenterY()+b.getCircle().getTranslateY();
-		double rad1=b.getCircle().getRadius();
+		double x1=b.getXPos();
+		double y1=b.getYPos();
+		double rad1=b.getRadius();
 		
 		for(int i=0;i<this.bugList.size();i++) {
 			if(i!=bugI) {
-				double x2=this.bugList.get(i).getCircle().getCenterX()+this.bugList.get(i).getCircle().getTranslateX();
-				double y2=this.bugList.get(i).getCircle().getCenterY()+this.bugList.get(i).getCircle().getTranslateY();
-				double rad2=this.bugList.get(i).getCircle().getRadius();
+				double x2=this.bugList.get(i).getXPos();
+				double y2=this.bugList.get(i).getYPos();
+				double rad2=this.bugList.get(i).getRadius();
 				
 				
 				double minDistSqd=Math.pow(rad1+rad2, 2);
@@ -99,18 +99,25 @@ public class World {
 				if(distSqd<minDistSqd) {
 					b.setdx(-1);
 					b.setdy(-1);
-					b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
-					b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy());
+//					b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
+//					b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy());
 					//maybe also move second ball values??
 					
 					this.bugList.get(i).setdx(-1);
 					this.bugList.get(i).setdy(-1);
-					this.bugList.get(i).getCircle().setTranslateX(this.bugList.get(i).getCircle().getTranslateX()+this.bugList.get(i).getdx());
-					this.bugList.get(i).getCircle().setTranslateY(this.bugList.get(i).getCircle().getTranslateY()+this.bugList.get(i).getdy());
+//					this.bugList.get(i).getCircle().setTranslateX(this.bugList.get(i).getCircle().getTranslateX()+this.bugList.get(i).getdx());
+//					this.bugList.get(i).getCircle().setTranslateY(this.bugList.get(i).getCircle().getTranslateY()+this.bugList.get(i).getdy());
 					
 					//now need to move away if too close <<maybe not needed??
 //					double newXVal=x2+Math.sqrt(minDistSqd-(Math.pow(y1-y2, 2)));
 //					double newYVal=y2+Math.sqrt(minDistSqd-(Math.pow(x1-x2, 2)));
+//					b.getCircle().setTranslateX(newXVal-b.getCircle().getCenterX());
+//					b.getCircle().setTranslateY(newYVal-b.getCircle().getCenterY());
+					
+					//still not working
+					//xI=((2*xJ)+sqrt(sq(2*xJ)-4*(sq(xJ)-minDistanceSqd))/(2));
+//					double newXVal=(Math.pow(2*x2, 2)+Math.sqrt(Math.pow(2*x2, 2)-4*(Math.pow(x2, 2)-minDistSqd)))/2.0;
+//					double newYVal=(Math.pow(2*y2, 2)+Math.sqrt(Math.pow(2*y2, 2)-4*(Math.pow(y2, 2)-minDistSqd)))/2.0;
 //					b.getCircle().setTranslateX(newXVal-b.getCircle().getCenterX());
 //					b.getCircle().setTranslateY(newYVal-b.getCircle().getCenterY());
 				}
@@ -123,14 +130,14 @@ public class World {
 	
 	//pass in a bug to collide off plant objects
 	public void collidePlants(Bug b) {
-		double x1=b.getCircle().getCenterX()+b.getCircle().getTranslateX();
-		double y1=b.getCircle().getCenterY()+b.getCircle().getTranslateY();
-		double rad1=b.getCircle().getRadius();
+		double x1=b.getXPos();
+		double y1=b.getYPos();
+		double rad1=b.getRadius();
 		for(int i=0;i<this.plantList.size();i++) {
 			
-			double x2=this.plantList.get(i).getCircle().getCenterX()+this.plantList.get(i).getCircle().getTranslateX();
-			double y2=this.plantList.get(i).getCircle().getCenterY()+this.plantList.get(i).getCircle().getTranslateY();
-			double rad2=this.plantList.get(i).getCircle().getRadius();
+			double x2=this.plantList.get(i).getXPos();
+			double y2=this.plantList.get(i).getYPos();
+			double rad2=this.plantList.get(i).getRadius();
 			
 			double minDistSqd=Math.pow(rad1+rad2, 2);
 			double distSqd=Math.pow(x1-x2, 2)+Math.pow(y1-y2, 2);
@@ -138,8 +145,8 @@ public class World {
 			if(distSqd<minDistSqd) {
 				b.setdx(-1);
 				b.setdy(-1);
-				b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
-				b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy());
+//				b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
+//				b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy());
 
 				//if bug hits a plant, plant gets eaten
 				this.plantList.get(i).eaten();
@@ -155,9 +162,9 @@ public class World {
 	public boolean detectCollide(double x1, double y1, double rad1) {
 		
 		for(int i=0;i<this.plantList.size();i++) {		
-			double x2=this.plantList.get(i).getCircle().getCenterX()+this.plantList.get(i).getCircle().getTranslateX();
-			double y2=this.plantList.get(i).getCircle().getCenterY()+this.plantList.get(i).getCircle().getTranslateY();
-			double rad2=this.plantList.get(i).getCircle().getRadius();
+			double x2=this.plantList.get(i).getXPos();
+			double y2=this.plantList.get(i).getYPos();
+			double rad2=this.plantList.get(i).getRadius();
 			
 			if(Math.pow(x1-x2, 2)+Math.pow(y1-y2, 2)<Math.pow(rad1+rad2, 2)) {
 				return true;
@@ -165,9 +172,9 @@ public class World {
 		}
 				
 		for(int i=0;i<this.bugList.size();i++) {		
-			double x2=this.bugList.get(i).getCircle().getCenterX()+this.bugList.get(i).getCircle().getTranslateX();
-			double y2=this.bugList.get(i).getCircle().getCenterY()+this.bugList.get(i).getCircle().getTranslateY();
-			double rad2=this.bugList.get(i).getCircle().getRadius();
+			double x2=this.bugList.get(i).getXPos();
+			double y2=this.bugList.get(i).getYPos();
+			double rad2=this.bugList.get(i).getRadius();
 			
 			if(Math.pow(x1-x2, 2)+Math.pow(y1-y2, 2)<Math.pow(rad1+rad2, 2)) {
 				return true;
@@ -183,10 +190,13 @@ public class World {
 		
 		//apply all the movements
 		for(int i=0;i<this.bugList.size();i++) {
+			//bugList.get(i).changeDirectionRandom();
+			bugList.get(i).lookForFood(plantList);
+			bugList.get(i).moveBug();
 			collideWalls(this.bugList.get(i));
 			collidePlants(this.bugList.get(i));
 			collideBugs(this.bugList.get(i), i);
-			
+			bugList.get(i).move();
 		}
 		
 		//update all the plants  <<not great
