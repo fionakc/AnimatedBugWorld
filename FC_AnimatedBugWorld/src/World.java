@@ -247,6 +247,7 @@ public class World {
 			}
 		}
 		
+		
 	}
 	
 	
@@ -282,6 +283,13 @@ public class World {
 		this.height=(int)h;
 	}
 	
+	public void restart() {
+		this.plantList.clear();
+		this.bugList.clear();
+		this.deadBugs.clear();
+		this.deadPlants.clear();
+		
+	}
 	
 	
 }

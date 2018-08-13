@@ -51,7 +51,7 @@ public class AnimationUI extends Application {
 		//group.getChildren().add(startWorld);
 		//scene=new Scene(group,width,height);
 		
-		//button generation
+		//create a start button for bugworld
 		Button startBtn=new Button();
 		startBtn.setText("Start");
 		
@@ -75,8 +75,38 @@ public class AnimationUI extends Application {
 				}		
 			}
 			
-		}); //end btn set action
+		}); //end startBtn set action
 		
+		Button resetBtn=new Button();
+		resetBtn.setText("Reset");
+		
+		resetBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) { //what we want to happen when button pressed
+				//startWorld.restart();
+				//panel.getChildren().removeAll(c);
+				//startWorld.populate();
+				
+				//put plants into group individually
+				
+				for(int i=0;i<startWorld.getPlantList().size();i++) {
+					panel.getChildren().remove(startWorld.getPlantList().get(i).getCircle());
+					//group.getChildren().add(startWorld.getPlantList().get(i).getCircle());
+				}
+				
+				//put bugs into group individually
+				//int bugListSize=startWorld.getBugListSize();
+				for(int i=0; i<startWorld.getBugList().size();i++) {
+					panel.getChildren().remove(startWorld.getBugList().get(i).getCircle());
+					//group.getChildren().add(startWorld.getBugList().get(i).getCircle());
+				}	
+				
+				startWorld.restart();
+			}
+			
+		}); //end resettBtn set action
+		
+		//what to do at each keyframe
 		KeyFrame frame =new KeyFrame(Duration.millis(16),new EventHandler<ActionEvent>() {
 
 			@Override
@@ -102,13 +132,18 @@ public class AnimationUI extends Application {
 		BackgroundFill backFill=new BackgroundFill(Color.WHITE,null, null);
 		title.setBackground(new Background(backFill));
 		title.setFont(Font.font ("Verdana", 20));
+		title.setPadding(new Insets(15));
+		
+		
 		panel.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 		
 		pane.setBackground(new Background(backFill));
 		
 		//menu button down the side
 		VBox leftside=new VBox();
-		leftside.getChildren().add(startBtn);
+		leftside.getChildren().addAll(startBtn,resetBtn);
+		leftside.setPadding(new Insets(10));
+		leftside.setSpacing(10);
 		
 		pane.setTop(title);
 		pane.setLeft(leftside);
