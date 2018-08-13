@@ -9,7 +9,7 @@ public class Plant {
 	private float xPos,yPos;
 	private Circle circle;  //maybe remake as final
 	private float radius;
-	private int age;
+	private int energy;
 	Image image1=new Image(getClass().getResourceAsStream("leaf1.png"));
 	Image image2=new Image(getClass().getResourceAsStream("leaf2.png"));
 
@@ -19,7 +19,7 @@ public class Plant {
 		this.yPos=(float) (Math.random()*(height-2*this.radius)+this.radius);
 		
 		this.radius=20;
-		this.age=5;
+		this.energy=5;
 		this.circle=new Circle(xPos,yPos,radius);
 
 		this.circle.setFill(Color.GREEN);
@@ -32,7 +32,7 @@ public class Plant {
 		this.yPos=y;
 		
 		this.radius=rad;
-		this.age=5;
+		this.energy=5;
 		circle=new Circle(xPos,yPos,radius);
 		
 		//picks one of two images for the plant
@@ -65,24 +65,22 @@ public class Plant {
 	
 	public void ageUp() {
 		//if(this.age!=9) {
-			this.age++;
+			this.energy++;
 		//}
 	}
 	
 	public void eaten() {
 		//can only eat plant if it still has age/energy
-		if(this.age>0) {
-			this.age--;			
+		if(this.energy>0) {
+			this.energy--;			
 		}			
 		
 	}
 	
-	public int getAge() {
-		return this.age;
+	public int getEnergy() {
+		return this.energy;
 	}
 	
-	public void setColour() {
-		this.circle.setFill(Color.WHITE);
-	}
+	
 	
 }

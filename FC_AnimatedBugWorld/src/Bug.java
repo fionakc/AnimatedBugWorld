@@ -193,7 +193,19 @@ public class Bug {
 		this.energy=this.energy+400;
 	}
 	
-//	public void setColour() {
-//		this.circle.setFill(Color.WHITE);
-//	}
+	public int getdxSign() {
+		if(this.dx<0) {
+			return -1;
+		}else {
+			return 1;
+		}
+	}
+	
+	public int getdySign() {
+		if(this.dy<0) {
+			return -1;
+		}else {
+			return 1;
+		}
+	}
 }
