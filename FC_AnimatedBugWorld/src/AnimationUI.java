@@ -5,7 +5,7 @@
  * There are 5 classes in this programme:
  * AnimationUI, World, Entity, Bug, Plant
  * 
- * This programme with generate a window where you can view a bugworld.
+ * This programme will generate a window where you can view a bugworld.
  * There will be bugs and plants moving around the window.
  * The bugs will look for the plants, and move towards them if they are close enough to see them.
  * Otherwise they will move randomly.
@@ -17,6 +17,11 @@
  * The start button starts the simulation.
  * Pressing it again will restart the simulation using the numbers in text fields.
  * The clear button will empty the bugworld.
+ * The pause button will allow the movements in the bugworld to be paused onscreen.
+ * The resume button will restart the movements without resetting any values.
+ * 
+ * There is an intermittent issue where sometimes the bugs will get stuck on each other.
+ * With more time this could possibly be resolved by moving one of the bugs further away after it has collided.
  * 
  */
 
@@ -52,20 +57,19 @@ import javafx.util.Duration;
 public class AnimationUI extends Application {
 
 	//Fields
-	int width=600, height=500;
+	private int width=600, height=500;
 	
-	Pane panel=new Pane();
+	private Pane panel=new Pane();	
+	private BorderPane layoutpane = new BorderPane();
+	private final Scene scene=new Scene(layoutpane,width,height);
+	private World startWorld=new World();
 	
-	BorderPane layoutpane = new BorderPane();
-	final Scene scene=new Scene(layoutpane,width,height);
-	World startWorld=new World();
+	private TextField numBugs=new TextField();
+	private TextField numPlants=new TextField();
+	private boolean running =false;
 	
-	TextField numBugs=new TextField();
-	TextField numPlants=new TextField();
-	boolean running =false;
-	
-
-	
+	private int numBugDefault=10;
+	private int numPlantDefault=20;
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -76,10 +80,8 @@ public class AnimationUI extends Application {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				updateBugWorld();
-				
-			}
-			
+				updateBugWorld();			
+			}		
 		});
 		
 		Timeline tl= TimelineBuilder.create().cycleCount(javafx.animation.Animation.INDEFINITE).keyFrames(frame).build();
@@ -88,86 +90,88 @@ public class AnimationUI extends Application {
 		//create a start button for bugworld
 		Button startBtn=new Button();
 		startBtn.setText("Start");
+		startBtn.setMaxWidth(Double.MAX_VALUE);
 		
 		startBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent arg0) { //what we want to happen when button pressed
-				if(!running) {
+			public void handle(ActionEvent arg0) { 	//what we want to happen when button pressed
+				if(!running) {						//if bugworld not already running, start bugworld
 					startBugWorld();
 					running=true;
-					
-				} else {
+				} else {							//if bugworld is already running, stop it and start a new bugworld
 					clearBugWorld();
 					startBugWorld();
 					running=true;
-					
 				}
 			}
 			
 		}); //end startBtn set action
 		
-		
-		
-		
+			
 		//create a reset button
 		Button resetBtn=new Button();
 		resetBtn.setText("Clear");
+		resetBtn.setMaxWidth(Double.MAX_VALUE);
 		
 		resetBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent arg0) { //what we want to happen when button pressed
-				
+			public void handle(ActionEvent arg0) { 	//what we want to happen when button pressed				
 				clearBugWorld();
-				running=false;
-				
-			}
-			
+				running=false;			
+			}		
 		}); //end resettBtn set action
 		
+			
+		//create a pause button
+		Button pauseBtn=new Button();
+		pauseBtn.setText("Pause");
+		pauseBtn.setMaxWidth(Double.MAX_VALUE);
 		
+		pauseBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) { //what we want to happen when button pressed
+				tl.pause();
+			}			
+		}); //end pauseBtn set action
 		
+		//create a resume button
+		Button resumeBtn=new Button();
+		resumeBtn.setText("Resume");
+		resumeBtn.setMaxWidth(Double.MAX_VALUE);
 		
-//		Button pauseBtn=new Button();
-//		pauseBtn.setText("Pause");
-//		
-//		pauseBtn.setOnAction(new EventHandler<ActionEvent>() {
-//			@Override
-//			public void handle(ActionEvent arg0) { //what we want to happen when button pressed
-//				tl.pause();
-//			}
-//			
-//		}); //end pauseBtn set action
+		resumeBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) { //what we want to happen when button pressed
+				tl.play();
+			}			
+		}); //end resumeBtn set action
 		
-		//make window look nicer
 
 		//create heading
 		Label title=new Label("Welcome to Bug World");
-		title.setAlignment(Pos.CENTER);
-		BackgroundFill backFill=new BackgroundFill(Color.WHITE,null, null);
-		//title.setBackground(new Background(backFill));
+		title.setAlignment(Pos.CENTER);		
 		title.setFont(Font.font ("Verdana", 20));
 		title.setPadding(new Insets(15));
 		
 		//create labels for the text fields
 		Label numBugLabel=new Label("Number of Bugs (max 50)");
 		Label numPlantLabel=new Label("Number of Plants (max 50)");
-		numBugs.setText("10");
-		numPlants.setText("20");
-		
-		
+		numBugs.setText(String.valueOf(numBugDefault));
+		numPlants.setText(String.valueOf(numPlantDefault));
+				
 		//create border around bug movement window
 		panel.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-
 		
-		//menu for buttons/textfields down the left side
+		//create menu for buttons/textfields down the left side
 		VBox leftside=new VBox();
-		leftside.getChildren().addAll(numBugLabel, numBugs, numPlantLabel, numPlants, startBtn,/**pauseBtn,*/resetBtn);
+		leftside.getChildren().addAll(numBugLabel, numBugs, numPlantLabel, numPlants, startBtn,resetBtn,pauseBtn,resumeBtn);
 		leftside.setPadding(new Insets(10));
 		leftside.setSpacing(10);
 		
 		//add things to borderpane
-		layoutpane.setBackground(new Background(backFill));  //set background to white
-		layoutpane.setPadding(new Insets(15, 20, 10, 10));
+		BackgroundFill backFill=new BackgroundFill(Color.WHITE,null, null);
+		layoutpane.setBackground(new Background(backFill)); 
+		layoutpane.setPadding(new Insets(15, 10, 10, 10));
 		layoutpane.setTop(title);
 		layoutpane.setLeft(leftside);
 		layoutpane.setCenter(panel);
@@ -179,6 +183,7 @@ public class AnimationUI extends Application {
 
 	} //end start
 	
+	//set up the bugworld, fill it with bugs and plants
 	public void startBugWorld() {
 		findStartNumbers();				
 		startWorld.populate();
@@ -197,6 +202,7 @@ public class AnimationUI extends Application {
 		
 	}
 	
+	//remove all bugs and plants from bugworld
 	public void clearBugWorld() {
 		//remove plants from group individually				
 		for(int i=0;i<startWorld.getPlantList().size();i++) {
@@ -231,32 +237,34 @@ public class AnimationUI extends Application {
 	public void findStartNumbers() {
 		
 		//check the number of bugs is valid and less than 50
-		boolean numBugsValid=isInteger(numBugs.getText());
-		int numBugInt=10;		
-		if(numBugsValid) {
-			numBugInt=Integer.valueOf(numBugs.getText());
-			if(numBugInt>50) {
-				numBugInt=50;
-				numBugs.setText("50");
-			}
+		boolean numBugsValid=isInteger(numBugs.getText());		//check that text input is a valid number
+		int numBugInt=numBugDefault;							//set int to default value
+		if(numBugsValid) {										//if text input is valid
+			numBugInt=Integer.valueOf(numBugs.getText());		//set int to input value
+			if(numBugInt>50) {									//if int is larger than 50
+				numBugInt=50;									//set int to 50
+			}													//this is so the programme doesn't slow down too much
 		}
 		
 		//check the number of plants is valid and less than 50
 		boolean numPlantsValid=isInteger(numPlants.getText());
-		int numPlantInt=10;		
+		int numPlantInt=numPlantDefault;		
 		if(numPlantsValid) {
 			numPlantInt=Integer.valueOf(numPlants.getText());
 			if(numPlantInt>50) {
 				numPlantInt=50;
-				numPlants.setText("50");
 			}
 		}
 		
-		startWorld.setNumbers(numBugInt, numPlantInt);
+		//display the decided upon numbers in the textfields
+		numBugs.setText(String.valueOf(numBugInt));
+		numPlants.setText(String.valueOf(numPlantInt));
 		
+		//pass the bug and plant numbers to the world object
+		startWorld.setNumbers(numBugInt, numPlantInt);
 	}
 	
-	//check the String is a valid number
+	//check the String num is a valid number (positive integer)
 	public boolean isInteger(String num) { 
 		//if num is null
 		if(num.equals(null)) {
@@ -277,9 +285,9 @@ public class AnimationUI extends Application {
 		return true;	
 	}
 
+	
 	public static void main(String[] args) {
 		launch();
-
 	}
 
 }
