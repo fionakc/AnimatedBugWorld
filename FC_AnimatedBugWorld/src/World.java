@@ -182,12 +182,9 @@ public class World {
 			if(distSqd<minDistSqd) {
 				b.setdx(-1);
 				b.setdy(-1);
-//				b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
-//				b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy());
 
 				//if bug hits a plant, plant gets eaten
 				this.plantList.get(i).eaten();
-				//System.out.println("plant "+i+" has age "+this.plantList.get(i).getAge());
 				b.gainEnergy();
 
 			}
@@ -230,7 +227,6 @@ public class World {
 		
 		//apply all the movements
 		for(int i=0;i<this.bugList.size();i++) {
-			//bugList.get(i).changeDirectionRandom();
 			bugList.get(i).lookForFood(plantList);
 			bugList.get(i).moveBug();
 			collideWalls(this.bugList.get(i));
@@ -241,9 +237,7 @@ public class World {
 		
 		//update all the plants energy. If energy=0 (dead), move to deadplant list
 		for(int i=0;i<this.plantList.size();i++) {
-			if(this.plantList.get(i).getEnergy()>0) {
-				//plantList.get(i).ageUp();
-			} else {
+			if(this.plantList.get(i).getEnergy()<=0) {			
 				this.deadPlants.add(this.plantList.get(i));
 				this.plantList.remove(i);
 			}
@@ -263,6 +257,24 @@ public class World {
 		
 	}
 	
+	//updates world size based on scene size from AnimationUI
+	public void updateWorldSize(double w, double h) {
+		this.width=(int)w;
+		this.height=(int)h;
+	}
+	
+	public void restart() {
+		this.plantList.clear();
+		this.bugList.clear();
+		this.deadBugs.clear();
+		this.deadPlants.clear();
+		
+	}
+	
+	public void setNumbers(int bug, int plant) {
+		this.numberOfBugs=bug;
+		this.numberOfPlants=plant;
+	}
 	
 	
 	//getters and setters
@@ -290,24 +302,7 @@ public class World {
 		return this.plantList.size();
 	}
 	
-	//updates world size based on scene size from AnimationUI
-	public void updateWorldSize(double w, double h) {
-		this.width=(int)w;
-		this.height=(int)h;
-	}
 	
-	public void restart() {
-		this.plantList.clear();
-		this.bugList.clear();
-		this.deadBugs.clear();
-		this.deadPlants.clear();
-		
-	}
-	
-	public void setNumbers(int bug, int plant) {
-		this.numberOfBugs=bug;
-		this.numberOfPlants=plant;
-	}
 	
 	
 }

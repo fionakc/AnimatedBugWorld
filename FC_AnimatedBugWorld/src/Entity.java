@@ -17,25 +17,23 @@ public class Entity extends Circle {
 	//Fields
 	protected float xPos,yPos,rad;
 	protected int energy;
-	protected Image image;
 	
 	public Entity(float x, float y, float rad) {
 		//creates a circle object with these values
 		super((double)(x),(double)(y),(double)(rad));	
 	}
 	
+	//return the x position of the circle object
 	public double getXPos() {
 		return getCenterX()+getTranslateX();
 	}
 	
+	//return the y position of the circle object
 	public double getYPos() {
 		return getCenterY()+getTranslateY();
 	}
-	
-	//get radius is already a circle method
-	
-	//unsure how to return circle??
-	
+
+	//return the energy of the entity object
 	public int getEnergy() {
 		return this.energy;
 	}

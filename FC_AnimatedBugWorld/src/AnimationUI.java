@@ -69,7 +69,6 @@ public class AnimationUI extends Application {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	
 	public void start(Stage primaryStage) throws Exception {
 		
 		//what to do at each keyframe

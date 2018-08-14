@@ -28,63 +28,9 @@ import javafx.scene.shape.Circle;
 public class Bug extends Entity{
 
 	//Fields
-//	private float xPos,yPos,dx,dy;
 	private float dx,dy;
-//	private Circle circle;  //maybe remake as final
-//	private float radius;
-//	private int energy;
 	private int movement=0;
-//	Image image=new Image(getClass().getResourceAsStream("beetle.png"));
-	//Paint imageView = new ImageView(image);
 	private ArrayList<Plant> foodNearby =new ArrayList<Plant>();
-	
-	/**
-	//basic constructor
-	public Bug(int width, int height) {
-		this.xPos=(float) (Math.random()*(width-2*this.radius)+this.radius);
-		this.yPos=(float) (Math.random()*(height-2*this.radius)+this.radius);
-		this.dx=-1.5f;
-		this.dy=-1.5f;
-		this.radius=20;
-		this.energy=1000;
-		
-		this.circle=new Circle(xPos,yPos,radius);
-		this.circle.setFill(new ImagePattern(image));
-		//p.setFill(new ImagePattern(flower, 0, 0, 1, 1, true));
-		
-		//from the internet to get random colours
-		//https://stackoverflow.com/questions/35715283/set-text-to-random-color-opacity-javafx
-		//this.circle.setFill(Color.color(Math.random(), Math.random(), Math.random()));
-		
-	}
-	
-	//constructor with bug size inputs
-	public Bug (float x, float y, float rad) {
-		this.xPos=x;
-		this.yPos=y;
-		this.dx=-1.5f;
-		this.dy=-1.5f;
-		this.radius=rad;
-		this.energy=1000;
-		
-		this.circle=new Circle(xPos,yPos,radius);
-		
-		//randomly pic bug icon
-		int direction = (int)(Math.random()*3);
-		if(direction<1) {
-			this.circle.setFill(new ImagePattern(new Image(getClass().getResourceAsStream("beetle.png"))));
-		}else if (direction<2){
-			this.circle.setFill(new ImagePattern(new Image(getClass().getResourceAsStream("bug1.png"))));
-		}else {
-			this.circle.setFill(new ImagePattern(new Image(getClass().getResourceAsStream("bug2.png"))));
-		}			
-		//this.circle.setFill(new ImagePattern(image));
-		//from the internet to get random colours
-		//https://stackoverflow.com/questions/35715283/set-text-to-random-color-opacity-javafx
-		//circle.setFill(Color.color(Math.random(), Math.random(), Math.random()));
-		
-	}
-	*/
 	
 	public Bug(float x, float y, float rad) {
 		super(x, y, rad);
@@ -94,6 +40,7 @@ public class Bug extends Entity{
 		chooseImage();
 	}
 	
+	//choose which bug image to display
 	public void chooseImage() {
 		int direction = (int)(Math.random()*3);
 		if(direction<1) {
@@ -105,9 +52,10 @@ public class Bug extends Entity{
 		}	
 	}
 
+	//get the bug to look for food nearby it
 	public void lookForFood(ArrayList<Plant> plantList) {
 		foodNearby.clear();
-		double radOffset=getRadius()*5;
+		double radOffset=getRadius()*5; //how far away the bug will look for food
 
 		for(int i=0;i<plantList.size();i++) {		
 			double x2=plantList.get(i).getXPos();
@@ -120,18 +68,17 @@ public class Bug extends Entity{
 		}
 	}
 	
+	//move the bug according to if it can see food or not
 	public void moveBug() {
 		if(foodNearby.isEmpty()) {
 			changeDirectionRandom();
 		}else {
-			moveToFood(foodNearby.get(0));
-				
-			
+			moveToFood(foodNearby.get(0));			
 		}
 	}
 	
-	public void moveToFood(Plant plant) {
-		//if bug is right and down from plant
+	//directs the bug towards the food by manipulating the bug's dx and dy values
+	public void moveToFood(Plant plant) {		
 		if(getXPos()>plant.getXPos() && getYPos()>plant.getYPos()) {
 			setDirection(-1,-1);
 		} else if(getXPos()<plant.getXPos() && getYPos()>plant.getYPos()) {
@@ -140,10 +87,47 @@ public class Bug extends Entity{
 			setDirection(1,1);
 		} else {
 			setDirection(-1,1);
-		}
-		//move();
+		}	
 	}
 	
+	
+	//actually moves the bug
+	public void move() {		
+		setTranslateX(getTranslateX()+this.dx);
+		setTranslateY(getTranslateY()+this.dy);
+	}
+	
+	//directs the bug to move in a random direction, by manipulating the bug's dx and dy values,
+	//but only if movement value is over threshold
+	public void changeDirectionRandom() {
+		if(this.movement>50) {
+			int direction = (int)(Math.random()*4);		
+			switch (direction) {			
+				case 0: setDirection(1,-1);
+						break;
+				case 1:	setDirection(-1,1);
+						break;
+				case 2: setDirection(-1,-1);
+						break;
+				case 3: setDirection(1,1);
+						break;		
+			} 
+			this.movement=0;
+		}		
+	}
+	
+	//every time bug moves, lose energy and log a movement
+	public void loseEnergy() {
+		this.energy--;
+		this.movement++;
+	}
+	
+	//gain energy for every plant eaten
+	public void gainEnergy() {
+		this.energy=this.energy+50;
+	}
+
+	//getters and setters
 	public float getdx() {
 		return this.dx;
 	}
@@ -160,98 +144,9 @@ public class Bug extends Entity{
 		this.dy=change*this.dy;
 	}
 	
-//	public Circle getCircle() {
-//		return this.circle;
-//	}
-	/**
-	public double getXPos() {
-		//return this.xPos;
-		return this.circle.getCenterX()+this.circle.getTranslateX();
-	}
-	*/
-//	
-//	public void setXPos(float x) {
-//		this.xPos=x;
-//		circle.setTranslateX(x);
-//	}
-//	
-	/**
-	public double getYPos() {
-		//return this.yPos;
-		return this.circle.getCenterY()+this.circle.getTranslateY();
-	}
-	*/
-//	
-//	public void setYPos(float y) {
-//		this.yPos=y;
-//		circle.setTranslateY(y);
-//	}
-//	
-	/**
-	public double getRadius() {
-		return this.circle.getRadius();
-	}
-	*/
-//	
 	public void setDirection(int changeX, int changeY) {
-		this.dx=changeX*Math.abs(this.dx); //this.dx;
-		this.dy=changeY*Math.abs(this.dy); //this.dx;
+		this.dx=changeX*Math.abs(this.dx); 
+		this.dy=changeY*Math.abs(this.dy); 
 	}
 	
-	public void move() {		
-		setTranslateX(getTranslateX()+this.dx);
-		setTranslateY(getTranslateY()+this.dy);
-	}
-	
-	
-	public void changeDirectionRandom() {
-		if(this.movement>50) {
-			int direction = (int)(Math.random()*4);		
-			switch (direction) {			
-				case 0: setDirection(1,-1);
-						break;
-				case 1:	setDirection(-1,1);
-						break;
-				case 2: setDirection(-1,-1);
-						break;
-				case 3: setDirection(1,1);
-						break;		
-			} 
-			this.movement=0;
-		}
-		//move();
-		
-	}
-	
-	/**
-	public int getEnergy() {
-		return this.energy;
-	}
-	*/
-	
-	//every time bug moves, lose energy and log a movement
-	public void loseEnergy() {
-		this.energy--;
-		this.movement++;
-	}
-	
-	public void gainEnergy() {
-		this.energy=this.energy+400;
-	}
-	
-//	public int getdxSign() {
-//		if(this.dx<0) {
-//			return -1;
-//		}else {
-//			return 1;
-//		}
-//	}
-//	
-//	public int getdySign() {
-//		if(this.dy<0) {
-//			return -1;
-//		}else {
-//			return 1;
-//		}
-//	}
 }
