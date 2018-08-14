@@ -59,21 +59,32 @@ public class AnimationUI extends Application {
 	//Fields
 	private int width=600, height=500;
 	
+	//generating UI elements
 	private Pane panel=new Pane();	
 	private BorderPane layoutpane = new BorderPane();
 	private final Scene scene=new Scene(layoutpane,width,height);
 	private World startWorld=new World();
-	
 	private TextField numBugs=new TextField();
 	private TextField numPlants=new TextField();
-	private boolean running =false;
+	private Button startBtn=new Button();
+	private Button resetBtn=new Button();
+	private Button pauseBtn=new Button();
+	private Button resumeBtn=new Button();
+	private Label title=new Label();
+	private Label numBugLabel=new Label();
+	private Label numPlantLabel=new Label();
+	private VBox leftside=new VBox();
+	private BackgroundFill backFill;
 	
+	private boolean running =false;
 	private int numBugDefault=10;
 	private int numPlantDefault=20;
 	
 	@SuppressWarnings("deprecation")
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		initialiseUI();
 		
 		//what to do at each keyframe
 		KeyFrame frame =new KeyFrame(Duration.millis(16),new EventHandler<ActionEvent>() {
@@ -84,14 +95,12 @@ public class AnimationUI extends Application {
 			}		
 		});
 		
+		//allow the animation to run
 		Timeline tl= TimelineBuilder.create().cycleCount(javafx.animation.Animation.INDEFINITE).keyFrames(frame).build();
 		tl.play();
 		
-		//create a start button for bugworld
-		Button startBtn=new Button();
-		startBtn.setText("Start");
-		startBtn.setMaxWidth(Double.MAX_VALUE);
 		
+		//action for the Start button
 		startBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) { 	//what we want to happen when button pressed
@@ -105,83 +114,87 @@ public class AnimationUI extends Application {
 				}
 			}
 			
-		}); //end startBtn set action
+		}); 
 		
-			
-		//create a reset button
-		Button resetBtn=new Button();
-		resetBtn.setText("Clear");
-		resetBtn.setMaxWidth(Double.MAX_VALUE);
-		
+		//action for the Reset button
 		resetBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) { 	//what we want to happen when button pressed				
 				clearBugWorld();
 				running=false;			
 			}		
-		}); //end resettBtn set action
+		}); 
 		
-			
-		//create a pause button
-		Button pauseBtn=new Button();
-		pauseBtn.setText("Pause");
-		pauseBtn.setMaxWidth(Double.MAX_VALUE);
-		
+		//action for the Pause button
 		pauseBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) { //what we want to happen when button pressed
 				tl.pause();
 			}			
-		}); //end pauseBtn set action
+		}); 
 		
-		//create a resume button
-		Button resumeBtn=new Button();
-		resumeBtn.setText("Resume");
-		resumeBtn.setMaxWidth(Double.MAX_VALUE);
-		
+		//action for the Resume button
 		resumeBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) { //what we want to happen when button pressed
 				tl.play();
 			}			
-		}); //end resumeBtn set action
+		}); 
 		
-
-		//create heading
-		Label title=new Label("Welcome to Bug World");
-		title.setAlignment(Pos.CENTER);		
-		title.setFont(Font.font ("Verdana", 20));
-		title.setPadding(new Insets(15));
-		
-		//create labels for the text fields
-		Label numBugLabel=new Label("Number of Bugs (max 50)");
-		Label numPlantLabel=new Label("Number of Plants (max 50)");
-		numBugs.setText(String.valueOf(numBugDefault));
-		numPlants.setText(String.valueOf(numPlantDefault));
-				
-		//create border around bug movement window
-		panel.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-		
-		//create menu for buttons/textfields down the left side
-		VBox leftside=new VBox();
-		leftside.getChildren().addAll(numBugLabel, numBugs, numPlantLabel, numPlants, startBtn,resetBtn,pauseBtn,resumeBtn);
-		leftside.setPadding(new Insets(10));
-		leftside.setSpacing(10);
-		
-		//add things to borderpane
-		BackgroundFill backFill=new BackgroundFill(Color.WHITE,null, null);
-		layoutpane.setBackground(new Background(backFill)); 
-		layoutpane.setPadding(new Insets(15, 10, 10, 10));
-		layoutpane.setTop(title);
-		layoutpane.setLeft(leftside);
-		layoutpane.setCenter(panel);
-
 		//display everything
 		primaryStage.setTitle("Bug World Animation");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
-	} //end start
+	} 
+	
+	
+	public void initialiseUI() {
+		//setting the Start button attributes
+		startBtn.setText("Start");
+		startBtn.setMaxWidth(Double.MAX_VALUE);
+		
+		//setting the Reset button attributes
+		resetBtn.setText("Clear");
+		resetBtn.setMaxWidth(Double.MAX_VALUE);
+		
+		//setting the Pause button attributes
+		pauseBtn.setText("Pause");
+		pauseBtn.setMaxWidth(Double.MAX_VALUE);
+		
+		//setting the Resume button attributes
+		resumeBtn.setText("Resume");
+		resumeBtn.setMaxWidth(Double.MAX_VALUE);
+		
+		//setting the heading label attributes
+		title.setText("Welcome to Bug World");
+		title.setAlignment(Pos.CENTER);		
+		title.setFont(Font.font ("Verdana", 20));
+		title.setPadding(new Insets(15));
+		
+		//setting the text field and label attributes	
+		numBugLabel.setText("Number of Bugs (max 50)");
+		numPlantLabel.setText("Number of Plants (max 50)");
+		numBugs.setText(String.valueOf(numBugDefault));
+		numPlants.setText(String.valueOf(numPlantDefault));
+				
+		//create border around bug movement window
+		panel.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+				
+		//create menu for buttons/textfields down the left side
+		leftside.getChildren().addAll(numBugLabel, numBugs, numPlantLabel, numPlants, startBtn,resetBtn,pauseBtn,resumeBtn);
+		leftside.setPadding(new Insets(10));
+		leftside.setSpacing(10);
+		
+		//add things to borderpane
+		backFill=new BackgroundFill(Color.WHITE,null, null);
+		layoutpane.setBackground(new Background(backFill)); 
+		layoutpane.setPadding(new Insets(15, 10, 10, 10));
+		layoutpane.setTop(title);
+		layoutpane.setLeft(leftside);
+		layoutpane.setCenter(panel);
+				
+	}
 	
 	//set up the bugworld, fill it with bugs and plants
 	public void startBugWorld() {

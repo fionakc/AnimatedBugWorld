@@ -9,13 +9,11 @@
  */
 
 
-import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 
 public class Entity extends Circle {
 
 	//Fields
-	protected float xPos,yPos,rad;
 	protected int energy;
 	
 	public Entity(float x, float y, float rad) {
