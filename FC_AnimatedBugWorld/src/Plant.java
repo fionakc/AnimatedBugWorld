@@ -1,3 +1,16 @@
+/**Animated Bug World
+ * by Fiona Crook
+ * 300442873
+ * 
+ * There are 5 classes in this programme:
+ * AnimationUI, World, Entity, Bug, Plant
+ * 
+ * The class Plant extends Entity, which itself extends Circle.
+ * The plant is represented by one of two randomly selected images.
+ * If a bug eats the plant it will lose energy.
+ * 
+ */
+
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;

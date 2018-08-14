@@ -1,3 +1,14 @@
+/**Animated Bug World
+ * by Fiona Crook
+ * 300442873
+ * 
+ * There are 5 classes in this programme:
+ * AnimationUI, World, Entity, Bug, Plant
+ * 
+ * The class Entity extends Circle, and is a superclass of Bug and Plant.
+ */
+
+
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 

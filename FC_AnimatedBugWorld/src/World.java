@@ -1,3 +1,16 @@
+/**Animated Bug World
+ * by Fiona Crook
+ * 300442873
+ * 
+ * There are 5 classes in this programme:
+ * AnimationUI, World, Entity, Bug, Plant
+ * 
+ * This class is where the ArrayLists of Bugs and Plants are held.
+ * These Entities are moved around, collided off walls and each other, and gain or lose energy.
+ * When an Entity has lost all its energy, it is moved to a deadEntiry ArrayList.
+ */
+
+
 import java.util.ArrayList;
 
 public class World {

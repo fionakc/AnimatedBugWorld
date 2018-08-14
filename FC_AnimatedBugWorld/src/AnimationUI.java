@@ -1,4 +1,29 @@
+/**Animated Bug World
+ * by Fiona Crook
+ * 300442873
+ * 
+ * There are 5 classes in this programme:
+ * AnimationUI, World, Entity, Bug, Plant
+ * 
+ * This programme with generate a window where you can view a bugworld.
+ * There will be bugs and plants moving around the window.
+ * The bugs will look for the plants, and move towards them if they are close enough to see them.
+ * Otherwise they will move randomly.
+ * If the bugs eat too much of the plant's energy, the plants will die and disappear.
+ * If the bugs go too long without eating, they will run out of energy, die, and disappear.
+ * 
+ * You can choose the starting number of bugs and plants (up to 50).
+ * Otherwise the default values will be used.
+ * The start button starts the simulation.
+ * Pressing it again will restart the simulation using the numbers in text fields.
+ * The clear button will empty the bugworld.
+ * 
+ */
+
+
+
 import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.animation.TimelineBuilder;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -31,24 +56,35 @@ public class AnimationUI extends Application {
 	
 	Pane panel=new Pane();
 	
-	BorderPane pane = new BorderPane();
-	final Scene scene=new Scene(pane,width,height);
+	BorderPane layoutpane = new BorderPane();
+	final Scene scene=new Scene(layoutpane,width,height);
 	World startWorld=new World();
 	
 	TextField numBugs=new TextField();
 	TextField numPlants=new TextField();
 	boolean running =false;
 	
+
+	
 	
 	@SuppressWarnings("deprecation")
 	@Override
 	
 	public void start(Stage primaryStage) throws Exception {
-		pane.setCenter(panel);
-
-		numBugs.setText("10");
-		numPlants.setText("20");
 		
+		//what to do at each keyframe
+		KeyFrame frame =new KeyFrame(Duration.millis(16),new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				updateBugWorld();
+				
+			}
+			
+		});
+		
+		Timeline tl= TimelineBuilder.create().cycleCount(javafx.animation.Animation.INDEFINITE).keyFrames(frame).build();
+		tl.play();
 		
 		//create a start button for bugworld
 		Button startBtn=new Button();
@@ -72,6 +108,8 @@ public class AnimationUI extends Application {
 		}); //end startBtn set action
 		
 		
+		
+		
 		//create a reset button
 		Button resetBtn=new Button();
 		resetBtn.setText("Clear");
@@ -88,23 +126,22 @@ public class AnimationUI extends Application {
 		}); //end resettBtn set action
 		
 		
-		//what to do at each keyframe
-		KeyFrame frame =new KeyFrame(Duration.millis(16),new EventHandler<ActionEvent>() {
+		
+		
+//		Button pauseBtn=new Button();
+//		pauseBtn.setText("Pause");
+//		
+//		pauseBtn.setOnAction(new EventHandler<ActionEvent>() {
+//			@Override
+//			public void handle(ActionEvent arg0) { //what we want to happen when button pressed
+//				tl.pause();
+//			}
+//			
+//		}); //end pauseBtn set action
+		
+		//make window look nicer
 
-			@Override
-			public void handle(ActionEvent arg0) {
-				updateBugWorld();
-				
-			}
-			
-		});
-		
-		
-		TimelineBuilder.create().cycleCount(javafx.animation.Animation.INDEFINITE).keyFrames(frame).build().play();
-		
-		//make screen look nicer
-		pane.setPadding(new Insets(15, 20, 10, 10));
-
+		//create heading
 		Label title=new Label("Welcome to Bug World");
 		title.setAlignment(Pos.CENTER);
 		BackgroundFill backFill=new BackgroundFill(Color.WHITE,null, null);
@@ -115,22 +152,26 @@ public class AnimationUI extends Application {
 		//create labels for the text fields
 		Label numBugLabel=new Label("Number of Bugs (max 50)");
 		Label numPlantLabel=new Label("Number of Plants (max 50)");
+		numBugs.setText("10");
+		numPlants.setText("20");
+		
 		
 		//create border around bug movement window
 		panel.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
 		
-		//set background to white
-		pane.setBackground(new Background(backFill));
-		
-		//menu for buttons down the left side
+		//menu for buttons/textfields down the left side
 		VBox leftside=new VBox();
-		leftside.getChildren().addAll(numBugLabel, numBugs, numPlantLabel, numPlants, startBtn,resetBtn);
+		leftside.getChildren().addAll(numBugLabel, numBugs, numPlantLabel, numPlants, startBtn,/**pauseBtn,*/resetBtn);
 		leftside.setPadding(new Insets(10));
 		leftside.setSpacing(10);
 		
 		//add things to borderpane
-		pane.setTop(title);
-		pane.setLeft(leftside);
+		layoutpane.setBackground(new Background(backFill));  //set background to white
+		layoutpane.setPadding(new Insets(15, 20, 10, 10));
+		layoutpane.setTop(title);
+		layoutpane.setLeft(leftside);
+		layoutpane.setCenter(panel);
 
 		//display everything
 		primaryStage.setTitle("Bug World Animation");
@@ -154,6 +195,7 @@ public class AnimationUI extends Application {
 		for(int i=0;i<bugListSize;i++) {
 			panel.getChildren().add(startWorld.getBugList().get(i));
 		}	
+		
 	}
 	
 	public void clearBugWorld() {

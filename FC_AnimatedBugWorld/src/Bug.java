@@ -1,3 +1,20 @@
+/**Animated Bug World
+ * by Fiona Crook
+ * 300442873
+ * 
+ * There are 5 classes in this programme:
+ * AnimationUI, World, Entity, Bug, Plant
+ * 
+ * The class Bug extends Entity, which itself extends Circle.
+ * The bug is represented by one of three randomly chosen images.
+ * The bug will look for food nearby it, and will move towards it.
+ * If no food is found nearby, the bug will move randomly.
+ * Random movement: the bug will move in a straight diagonal line for 50 frames.
+ * Then it will pick a new diagonal to move along (which may be the same as the previous diagonal).
+ * If the bug eats a plant it will gain energy.
+ * Every move the bug makes looses it energy.
+ */
+
 import java.util.ArrayList;
 import java.util.Random;
 
