@@ -74,7 +74,6 @@ public class Plant {
 		if(this.energy>0) {
 			this.energy--;			
 		}			
-		
 	}
 	
 	public int getEnergy() {

@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -36,8 +37,12 @@ public class AnimationUI extends Application {
 	//Group group=new Group();
 	BorderPane pane = new BorderPane();
 	final Scene scene=new Scene(pane,width,height);
-	//World startWorld=new World();
-	World startWorld=new World(this.width, this.height);
+	World startWorld=new World();
+	//World startWorld=new World(this.width, this.height);
+	
+	//create text field
+	TextField numBugs=new TextField();
+	TextField numPlants=new TextField();
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -47,6 +52,8 @@ public class AnimationUI extends Application {
 		//System.out.println(panel.getWidth()); //still don't have a size <<seems to work okay now
 		//startWorld.updateWorldSize(panel.getWidth(), panel.getHeight());
 		
+		numBugs.setText("10");
+		numPlants.setText("20");
 		
 		//group.getChildren().add(startWorld);
 		//scene=new Scene(group,width,height);
@@ -58,6 +65,10 @@ public class AnimationUI extends Application {
 		startBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) { //what we want to happen when button pressed
+				
+				
+				findStartNumbers();
+				
 				startWorld.populate();
 				
 				//put plants into group individually
@@ -87,20 +98,21 @@ public class AnimationUI extends Application {
 				//panel.getChildren().removeAll(c);
 				//startWorld.populate();
 				
-				//put plants into group individually
+				//remove plants from group individually
 				
 				for(int i=0;i<startWorld.getPlantList().size();i++) {
 					panel.getChildren().remove(startWorld.getPlantList().get(i).getCircle());
 					//group.getChildren().add(startWorld.getPlantList().get(i).getCircle());
 				}
 				
-				//put bugs into group individually
+				//remove bugs from group individually
 				//int bugListSize=startWorld.getBugListSize();
 				for(int i=0; i<startWorld.getBugList().size();i++) {
 					panel.getChildren().remove(startWorld.getBugList().get(i).getCircle());
 					//group.getChildren().add(startWorld.getBugList().get(i).getCircle());
 				}	
 				
+				//clear out world values
 				startWorld.restart();
 			}
 			
@@ -135,13 +147,17 @@ public class AnimationUI extends Application {
 		title.setPadding(new Insets(15));
 		
 		
+		
+		Label numBugLabel=new Label("Number of Bugs (max 50)");
+		Label numPlantLabel=new Label("Number of Plants (max 50)");
+		
 		panel.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 		
 		pane.setBackground(new Background(backFill));
 		
 		//menu button down the side
 		VBox leftside=new VBox();
-		leftside.getChildren().addAll(startBtn,resetBtn);
+		leftside.getChildren().addAll(numBugLabel, numBugs, numPlantLabel, numPlants, startBtn,resetBtn);
 		leftside.setPadding(new Insets(10));
 		leftside.setSpacing(10);
 		
@@ -176,6 +192,49 @@ public class AnimationUI extends Application {
 		
 	}
 	
+	public void findStartNumbers() {
+		//change the number of bugs and plants created
+		boolean numBugsValid=isInteger(numBugs.getText());
+		int numBugInt=10;		
+		if(numBugsValid) {
+			numBugInt=Integer.valueOf(numBugs.getText());
+			if(numBugInt>50) {
+				numBugInt=50;
+				numBugs.setText("50");
+			}
+		}
+		boolean numPlantsValid=isInteger(numPlants.getText());
+		int numPlantInt=10;		
+		if(numPlantsValid) {
+			numPlantInt=Integer.valueOf(numPlants.getText());
+			if(numPlantInt>50) {
+				numPlantInt=50;
+				numPlants.setText("50");
+			}
+		}
+		startWorld.setNumbers(numBugInt, numPlantInt);
+		
+	}
+	
+	public boolean isInteger(String num) { //or could use parseInt with try/catch exceptions
+		//if num is null
+		if(num.equals(null)) {
+			return false;
+		}
+		//if nothing entered
+		if(num.isEmpty()) {
+			return false;
+		}
+		//convert string to individual chars, if any char is not a number
+		//also prevents negative numbers
+		for(int i=0;i<num.length();i++) {
+			char c = num.charAt(i);
+	        if (c < '0' || c > '9') {
+	            return false;
+	        }
+		}
+			return true;	
+	}
 
 	public static void main(String[] args) {
 		launch();

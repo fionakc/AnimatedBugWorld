@@ -15,7 +15,7 @@ public class World {
 	//class constructor
 	public World(int w,int h) {
 		this.height=h;
-		this.width=w;
+		this.width=w;	
 	}
 	
 	public World() {
@@ -27,7 +27,7 @@ public class World {
 		
 		//create the plants, making sure they do not overlap on any other plants previously created
 		for(int i=0;i<this.numberOfPlants;i++) {
-			float radius=10;
+			float radius=7;
 			boolean plantCollides=true;
 			while(plantCollides) {
 				double xTemp=(Math.random()*(this.width-2*radius)+radius);
@@ -41,7 +41,7 @@ public class World {
 		
 		//create the bugs, making sure they do not overlap on any other plant or bug previously created
 		for(int i=0;i<this.numberOfBugs;i++) {
-			float radius=15;
+			float radius=10;
 			boolean bugCollides=true;
 			while(bugCollides) {
 				double xTemp=(Math.random()*(this.width-2*radius)+radius);
@@ -289,6 +289,11 @@ public class World {
 		this.deadBugs.clear();
 		this.deadPlants.clear();
 		
+	}
+	
+	public void setNumbers(int bug, int plant) {
+		this.numberOfBugs=bug;
+		this.numberOfPlants=plant;
 	}
 	
 	
