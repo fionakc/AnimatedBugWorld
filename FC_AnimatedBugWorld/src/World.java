@@ -34,7 +34,7 @@ public class World {
 				double yTemp=(Math.random()*(this.height-2*radius)+radius);
 				plantCollides=detectCollide(xTemp,yTemp,radius);
 				if(!plantCollides) {
-					plantList.add(new Plant(this.width, this.height, (float)xTemp, (float)yTemp, radius));
+					plantList.add(new Plant((float)xTemp, (float)yTemp, radius));
 				}
 			}
 		}
@@ -48,7 +48,7 @@ public class World {
 				double yTemp=(Math.random()*(this.height-2*radius)+radius);
 				bugCollides=detectCollide(xTemp,yTemp,radius);
 				if(!bugCollides) {
-					bugList.add(new Bug(this.width, this.height, (float)xTemp, (float)yTemp, radius));
+					bugList.add(new Bug((float)xTemp, (float)yTemp, radius));
 				}
 			}
 		}

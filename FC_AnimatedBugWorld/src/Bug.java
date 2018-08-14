@@ -40,7 +40,7 @@ public class Bug {
 	}
 	
 	//constructor with bug size inputs
-	public Bug (int width, int height, float x, float y, float rad) {
+	public Bug (float x, float y, float rad) {
 		this.xPos=x;
 		this.yPos=y;
 		this.dx=-1.5f;
