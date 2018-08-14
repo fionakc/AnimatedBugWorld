@@ -8,18 +8,20 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
-public class Bug {
+public class Bug extends Entity{
 
 	//Fields
-	private float xPos,yPos,dx,dy;
-	private Circle circle;  //maybe remake as final
-	private float radius;
-	private int energy;
+//	private float xPos,yPos,dx,dy;
+	private float dx,dy;
+//	private Circle circle;  //maybe remake as final
+//	private float radius;
+//	private int energy;
 	private int movement=0;
-	Image image=new Image(getClass().getResourceAsStream("beetle.png"));
+//	Image image=new Image(getClass().getResourceAsStream("beetle.png"));
 	//Paint imageView = new ImageView(image);
 	private ArrayList<Plant> foodNearby =new ArrayList<Plant>();
 	
+	/**
 	//basic constructor
 	public Bug(int width, int height) {
 		this.xPos=(float) (Math.random()*(width-2*this.radius)+this.radius);
@@ -64,6 +66,26 @@ public class Bug {
 		//https://stackoverflow.com/questions/35715283/set-text-to-random-color-opacity-javafx
 		//circle.setFill(Color.color(Math.random(), Math.random(), Math.random()));
 		
+	}
+	*/
+	
+	public Bug(float x, float y, float rad) {
+		super(x, y, rad);
+		this.dx=-1.5f;
+		this.dy=-1.5f;
+		this.energy=1000;
+		chooseImage();
+	}
+	
+	public void chooseImage() {
+		int direction = (int)(Math.random()*3);
+		if(direction<1) {
+			setFill(new ImagePattern(new Image(getClass().getResourceAsStream("beetle.png"))));
+		}else if (direction<2){
+			setFill(new ImagePattern(new Image(getClass().getResourceAsStream("bug1.png"))));
+		}else {
+			setFill(new ImagePattern(new Image(getClass().getResourceAsStream("bug2.png"))));
+		}	
 	}
 
 	public void lookForFood(ArrayList<Plant> plantList) {
@@ -121,33 +143,38 @@ public class Bug {
 		this.dy=change*this.dy;
 	}
 	
-	public Circle getCircle() {
-		return this.circle;
-	}
-	
+//	public Circle getCircle() {
+//		return this.circle;
+//	}
+	/**
 	public double getXPos() {
 		//return this.xPos;
 		return this.circle.getCenterX()+this.circle.getTranslateX();
 	}
+	*/
 //	
 //	public void setXPos(float x) {
 //		this.xPos=x;
 //		circle.setTranslateX(x);
 //	}
 //	
+	/**
 	public double getYPos() {
 		//return this.yPos;
 		return this.circle.getCenterY()+this.circle.getTranslateY();
 	}
+	*/
 //	
 //	public void setYPos(float y) {
 //		this.yPos=y;
 //		circle.setTranslateY(y);
 //	}
 //	
+	/**
 	public double getRadius() {
 		return this.circle.getRadius();
 	}
+	*/
 //	
 	public void setDirection(int changeX, int changeY) {
 		this.dx=changeX*Math.abs(this.dx); //this.dx;
@@ -155,8 +182,8 @@ public class Bug {
 	}
 	
 	public void move() {		
-		this.circle.setTranslateX(this.circle.getTranslateX()+this.dx);
-		this.circle.setTranslateY(this.circle.getTranslateY()+this.dy);
+		setTranslateX(getTranslateX()+this.dx);
+		setTranslateY(getTranslateY()+this.dy);
 	}
 	
 	
@@ -179,9 +206,11 @@ public class Bug {
 		
 	}
 	
+	/**
 	public int getEnergy() {
 		return this.energy;
 	}
+	*/
 	
 	//every time bug moves, lose energy and log a movement
 	public void loseEnergy() {
@@ -193,19 +222,19 @@ public class Bug {
 		this.energy=this.energy+400;
 	}
 	
-	public int getdxSign() {
-		if(this.dx<0) {
-			return -1;
-		}else {
-			return 1;
-		}
-	}
-	
-	public int getdySign() {
-		if(this.dy<0) {
-			return -1;
-		}else {
-			return 1;
-		}
-	}
+//	public int getdxSign() {
+//		if(this.dx<0) {
+//			return -1;
+//		}else {
+//			return 1;
+//		}
+//	}
+//	
+//	public int getdySign() {
+//		if(this.dy<0) {
+//			return -1;
+//		}else {
+//			return 1;
+//		}
+//	}
 }

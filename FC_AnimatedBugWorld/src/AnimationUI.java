@@ -71,7 +71,7 @@ public class AnimationUI extends Application {
 				//put bugs into group individually
 				int bugListSize=startWorld.getBugListSize();
 				for(int i=0;i<bugListSize;i++) {
-					panel.getChildren().add(startWorld.getBugList().get(i).getCircle());
+					panel.getChildren().add(startWorld.getBugList().get(i));
 					//group.getChildren().add(startWorld.getBugList().get(i).getCircle());
 				}		
 			}
@@ -92,7 +92,7 @@ public class AnimationUI extends Application {
 				
 				//remove bugs from group individually
 				for(int i=0; i<startWorld.getBugList().size();i++) {
-					panel.getChildren().remove(startWorld.getBugList().get(i).getCircle());
+					panel.getChildren().remove(startWorld.getBugList().get(i));
 				}	
 				
 				//clear out world values
@@ -160,7 +160,7 @@ public class AnimationUI extends Application {
 			panel.getChildren().remove(startWorld.getDeadPlants().get(i));
 		}
 		for(int i=0;i<startWorld.getDeadBugs().size();i++) {
-			panel.getChildren().remove(startWorld.getDeadBugs().get(i).getCircle());
+			panel.getChildren().remove(startWorld.getDeadBugs().get(i));
 		}	
 	}
 	

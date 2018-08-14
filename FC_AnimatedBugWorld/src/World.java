@@ -59,27 +59,27 @@ public class World {
 	public void collideWalls(Bug b) {
 
 		//collides with left wall
-		if(b.getXPos()<b.getCircle().getRadius()) {
+		if(b.getXPos()<b.getRadius()) {
 			b.setdx(-1);
-			b.getCircle().setTranslateX(b.getCircle().getRadius()-b.getCircle().getCenterX());
+			b.setTranslateX(b.getRadius()-b.getCenterX());
 		}
 		
 		//collides with right wall
-		if(b.getXPos()> this.width-b.getCircle().getRadius()) {
+		if(b.getXPos()> this.width-b.getRadius()) {
 			b.setdx(-1);
-			b.getCircle().setTranslateX(this.width-b.getCircle().getRadius()-b.getCircle().getCenterX());
+			b.setTranslateX(this.width-b.getRadius()-b.getCenterX());
 		}
 		
 		//collides with top
-		if(b.getYPos()<b.getCircle().getRadius()) {
+		if(b.getYPos()<b.getRadius()) {
 			b.setdy(-1);
-			b.getCircle().setTranslateY(b.getCircle().getRadius()-b.getCircle().getCenterY());
+			b.setTranslateY(b.getRadius()-b.getCenterY());
 		}
 		
 		//collides with bottom
-		if(b.getYPos()>this.height-b.getCircle().getRadius()) {
+		if(b.getYPos()>this.height-b.getRadius()) {
 			b.setdy(-1);
-			b.getCircle().setTranslateY(this.height-b.getCircle().getRadius()-b.getCircle().getCenterY());
+			b.setTranslateY(this.height-b.getRadius()-b.getCenterY());
 		}
 		
 		//these are moved to update() b.move()
@@ -112,8 +112,8 @@ public class World {
 					b.setdx(-1);
 					b.setdy(-1);
 					//these seem to be the most stable configuration
-					b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
-					b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy());
+					b.setTranslateX(b.getTranslateX()+b.getdx());
+					b.setTranslateY(b.getTranslateY()+b.getdy());
 					
 //					b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx()+b.getdxSign()*1.5);
 //					b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy()+b.getdySign()*1.5);
@@ -122,8 +122,8 @@ public class World {
 					this.bugList.get(i).setdx(-1);
 					this.bugList.get(i).setdy(-1);
 					//these seem to be the most stable configuration
-					this.bugList.get(i).getCircle().setTranslateX(this.bugList.get(i).getCircle().getTranslateX()+this.bugList.get(i).getdx());
-					this.bugList.get(i).getCircle().setTranslateY(this.bugList.get(i).getCircle().getTranslateY()+this.bugList.get(i).getdy());
+					this.bugList.get(i).setTranslateX(this.bugList.get(i).getTranslateX()+this.bugList.get(i).getdx());
+					this.bugList.get(i).setTranslateY(this.bugList.get(i).getTranslateY()+this.bugList.get(i).getdy());
 					
 //					this.bugList.get(i).getCircle().setTranslateX(this.bugList.get(i).getCircle().getTranslateX()+this.bugList.get(i).getdx()+this.bugList.get(i).getdxSign()*1.5);
 //					this.bugList.get(i).getCircle().setTranslateY(this.bugList.get(i).getCircle().getTranslateY()+this.bugList.get(i).getdy()+this.bugList.get(i).getdySign()*1.5);
