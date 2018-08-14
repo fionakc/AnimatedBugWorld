@@ -13,17 +13,12 @@
  * Then it will pick a new diagonal to move along (which may be the same as the previous diagonal).
  * If the bug eats a plant it will gain energy.
  * Every move the bug makes looses it energy.
+ * 
  */
 
 import java.util.ArrayList;
-import java.util.Random;
-
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 
 public class Bug extends Entity{
 

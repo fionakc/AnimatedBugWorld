@@ -6,6 +6,7 @@
  * AnimationUI, World, Entity, Bug, Plant
  * 
  * The class Entity extends Circle, and is a superclass of Bug and Plant.
+ * 
  */
 
 

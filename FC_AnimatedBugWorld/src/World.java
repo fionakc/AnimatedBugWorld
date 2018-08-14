@@ -7,7 +7,8 @@
  * 
  * This class is where the ArrayLists of Bugs and Plants are held.
  * These Entities are moved around, collided off walls and each other, and gain or lose energy.
- * When an Entity has lost all its energy, it is moved to a deadEntiry ArrayList.
+ * When an Entity has lost all its energy, it is moved to a deadEntity ArrayList.
+ * 
  */
 
 
@@ -21,15 +22,9 @@ public class World {
 	private ArrayList<Plant> plantList=new ArrayList<Plant>();
 	private int numberOfBugs = 10;
 	private int numberOfPlants=20;
-	
 	private ArrayList<Bug> deadBugs=new ArrayList<Bug>();
 	private ArrayList<Plant> deadPlants=new ArrayList<Plant>();
 	
-	//class constructor
-	public World(int w,int h) {
-		this.height=h;
-		this.width=w;	
-	}
 	
 	public World() {
 		
@@ -95,11 +90,7 @@ public class World {
 			b.setTranslateY(this.height-b.getRadius()-b.getCenterY());
 		}
 		
-		//these are moved to update() b.move()
-//		b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx());
-//		b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy());
-		
-	} //end collides wall
+	} 
 	
 	//allows a bug to bounce off any other bug in the world, but not itself
 	public void collideBugs(Bug b, int bugI) {
@@ -124,35 +115,13 @@ public class World {
 				if(distSqd<minDistSqd) {
 					b.setdx(-1);
 					b.setdy(-1);
-					//these seem to be the most stable configuration
 					b.setTranslateX(b.getTranslateX()+b.getdx());
 					b.setTranslateY(b.getTranslateY()+b.getdy());
 					
-//					b.getCircle().setTranslateX(b.getCircle().getTranslateX()+b.getdx()+b.getdxSign()*1.5);
-//					b.getCircle().setTranslateY(b.getCircle().getTranslateY()+b.getdy()+b.getdySign()*1.5);
-					//maybe also move second ball values??
-					
 					this.bugList.get(i).setdx(-1);
 					this.bugList.get(i).setdy(-1);
-					//these seem to be the most stable configuration
 					this.bugList.get(i).setTranslateX(this.bugList.get(i).getTranslateX()+this.bugList.get(i).getdx());
 					this.bugList.get(i).setTranslateY(this.bugList.get(i).getTranslateY()+this.bugList.get(i).getdy());
-					
-//					this.bugList.get(i).getCircle().setTranslateX(this.bugList.get(i).getCircle().getTranslateX()+this.bugList.get(i).getdx()+this.bugList.get(i).getdxSign()*1.5);
-//					this.bugList.get(i).getCircle().setTranslateY(this.bugList.get(i).getCircle().getTranslateY()+this.bugList.get(i).getdy()+this.bugList.get(i).getdySign()*1.5);
-					
-					//now need to move away if too close <<maybe not needed??
-//					double newXVal=x2+Math.sqrt(minDistSqd-(Math.pow(y1-y2, 2)));
-//					double newYVal=y2+Math.sqrt(minDistSqd-(Math.pow(x1-x2, 2)));
-//					b.getCircle().setTranslateX(newXVal-b.getCircle().getCenterX());
-//					b.getCircle().setTranslateY(newYVal-b.getCircle().getCenterY());
-					
-					//still not working
-					//xI=((2*xJ)+sqrt(sq(2*xJ)-4*(sq(xJ)-minDistanceSqd))/(2));
-//					double newXVal=(Math.pow(2*x2, 2)+Math.sqrt(Math.pow(2*x2, 2)-4*(Math.pow(x2, 2)-minDistSqd)))/2.0;
-//					double newYVal=(Math.pow(2*y2, 2)+Math.sqrt(Math.pow(2*y2, 2)-4*(Math.pow(y2, 2)-minDistSqd)))/2.0;
-//					b.getCircle().setTranslateX(newXVal-b.getCircle().getCenterX());
-//					b.getCircle().setTranslateY(newYVal-b.getCircle().getCenterY());
 				}
 				
 			}
@@ -254,7 +223,6 @@ public class World {
 			}
 		}
 		
-		
 	}
 	
 	//updates world size based on scene size from AnimationUI
@@ -263,6 +231,7 @@ public class World {
 		this.height=(int)h;
 	}
 	
+	//removes everything from the arrayLists
 	public void restart() {
 		this.plantList.clear();
 		this.bugList.clear();
@@ -271,6 +240,7 @@ public class World {
 		
 	}
 	
+	//assigns the starting number of bugs and plants
 	public void setNumbers(int bug, int plant) {
 		this.numberOfBugs=bug;
 		this.numberOfPlants=plant;
@@ -302,7 +272,5 @@ public class World {
 		return this.plantList.size();
 	}
 	
-	
-	
-	
+
 }

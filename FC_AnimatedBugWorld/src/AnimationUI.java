@@ -22,6 +22,10 @@
  * 
  * There is an intermittent issue where sometimes the bugs will get stuck on each other.
  * With more time this could possibly be resolved by moving one of the bugs further away after it has collided.
+ * It also occurs if two or more bugs are competing for the same plant, and colliding against each other.
+ * They are unable to move away from the food, but can't move towards it because the other bug is in their way.
+ * 
+ * With further time I could also implement obstacles for the bugs to interact with.
  * 
  */
 
@@ -91,14 +95,13 @@ public class AnimationUI extends Application {
 
 			@Override
 			public void handle(ActionEvent arg0) {
-				updateBugWorld();			
+				updateBugWorld();	
 			}		
 		});
 		
 		//allow the animation to run
 		Timeline tl= TimelineBuilder.create().cycleCount(javafx.animation.Animation.INDEFINITE).keyFrames(frame).build();
 		tl.play();
-		
 		
 		//action for the Start button
 		startBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -107,10 +110,13 @@ public class AnimationUI extends Application {
 				if(!running) {						//if bugworld not already running, start bugworld
 					startBugWorld();
 					running=true;
+					tl.play();
 				} else {							//if bugworld is already running, stop it and start a new bugworld
+					tl.stop();
 					clearBugWorld();
 					startBugWorld();
 					running=true;
+					tl.play();
 				}
 			}
 			
@@ -119,7 +125,8 @@ public class AnimationUI extends Application {
 		//action for the Reset button
 		resetBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent arg0) { 	//what we want to happen when button pressed				
+			public void handle(ActionEvent arg0) { 	
+				tl.stop();
 				clearBugWorld();
 				running=false;			
 			}		
@@ -128,7 +135,7 @@ public class AnimationUI extends Application {
 		//action for the Pause button
 		pauseBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent arg0) { //what we want to happen when button pressed
+			public void handle(ActionEvent arg0) { 
 				tl.pause();
 			}			
 		}); 
