@@ -16,7 +16,7 @@
  * Otherwise the default values will be used.
  * The start button starts the simulation.
  * Pressing it again will restart the simulation using the numbers in text fields.
- * The clear button will empty the bugworld.
+ * The clear button will empty the bugworld and reset it.
  * The pause button will allow the movements in the bugworld to be paused onscreen.
  * The resume button will restart the movements without resetting any values.
  * 
